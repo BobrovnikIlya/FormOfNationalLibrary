@@ -36,9 +36,28 @@ public class UserService {
     public boolean existsByLogin(String login) {
         return userRepository.existsByLogin(login);
     }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     private String encryptPassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    public boolean checkPassword(User user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
+
+    public boolean authenticate(String login, String password) {
+        User user = findByLogin(login);
+        if (user != null) {
+            return checkPassword(user, password);
+        }
+        return false;
     }
 }
 

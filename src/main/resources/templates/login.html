@@ -16,7 +16,7 @@
         <div class="form-content">
             <form action="/login" method="post">
                 <div class="form-group">
-                    <label for="username">Имя пользователя</label>
+                    <label for="username">Логин</label>
                     <input type="text" id="username" name="username" required="required"/>
                 </div>
                 <div class="form-group">
@@ -27,10 +27,11 @@
                     <button type="submit">Авторизация</button>
                 </div>
                 <div class="form-group">
-                    <a href="/register">Зарегистрироваться</a>
-                </div>
-                <div class="form-group">
-                    <p style="color: red; align-items: center"  th:text="${error}"></p>
+                    <div class = "message">
+                        <a href="/register">Зарегистрироваться</a>
+                        <br>
+                        <p id="error" th:text="${error}"></p>
+                    </div>
                 </div>
             </form>
         </div>

@@ -8,60 +8,67 @@
     <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
 </head>
 <body>
-<div class="form">
+<div class="form2">
     <div class="form-panel one">
         <div class="form-header">
             <h1>Регистрация пользователя</h1>
         </div>
         <div class="form-content">
             <form action="/register" method="post" th:object="${user}">
-                <div class="form-group">
-                    <label for="login">Логин</label>
-                    <input type="text" id="login" th:field="*{login}" required="required"/>
+                <div class="form-columns">
+                    <div class="form-group">
+                        <label for="login">Логин</label>
+                        <input type="text" id="login" th:field="*{login}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="FIO">ФИО</label>
+                        <input type="text" id="FIO" th:field="*{FIO}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" th:field="*{password}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Дата рождения</label>
+                        <input type="date" id="date" th:field="*{date}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Повтор пароля</label>
+                        <input type="password" id="confirmPassword" th:name="confirmPassword" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberDocument">Номер документа</label>
+                        <input type="text" id="numberDocument" th:field="*{numberDocument}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email адрес</label>
+                        <input type="email" id="email" th:field="*{email}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Телефонный номер</label>
+                        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Роль</label>
+                        <select id="role" th:field="*{role.id}" required="required">
+                            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Описание</label>
+                        <input type="text" id="description" th:field="*{description}" required="required"/>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" id="password" th:field="*{password}" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Повтор пароля</label>
-                    <input type="password" id="confirmPassword" th:name="confirmPassword" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email адрес</label>
-                    <input type="email" id="email" th:field="*{email}" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="role">Роль</label>
-                    <select id="role" th:field="*{role.id}" required="required">
-                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="FIO">ФИО</label>
-                    <input type="text" id="FIO" th:field="*{FIO}" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="numberDocument">Номер документа</label>
-                    <input type="text" id="numberDocument" th:field="*{numberDocument}" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="phoneNumber">Телефонный номер</label>
-                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required="required"/>
-                </div>
-                <div class="form-group">
-                    <label for="date">Дата рождения</label>
-                    <input type="date" id="date" th:field="*{date}" required="required"/>
-                </div>
-                <div class="form-group full-width">
-                    <label for="description">Описание</label>
-                    <input type="text" id="description" th:field="*{description}"/>
-                </div>
+
                 <div class="form-group full-width">
                     <button type="submit">Регистрация</button>
                 </div>
-                <div class="form-group full-width">
-                    <p th:text="${message}"></p>
+                <div class="form-group">
+                    <div class="message">
+                        <a href="/login">Авторизоваться</a>
+                        <br>
+                        <p th:text="${message}"></p>
+                    </div>
                 </div>
             </form>
         </div>

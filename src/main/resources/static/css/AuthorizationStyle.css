@@ -36,6 +36,17 @@ body {
   margin: 100px auto 10px;
   overflow: hidden;
 }
+.form2 {
+  z-index: 15;
+  position: relative;
+  background: #FFFFFF;
+  width: 1000px;
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  margin: 100px auto 10px;
+  overflow: hidden;
+}
 .form-toggle {
   z-index: 10;
   position: absolute;
@@ -106,7 +117,7 @@ body {
 .two .form-group label {
   color: #FFFFFF;
 }
-.form-group input {
+.form-group input, select {
   outline: none;
   display: block;
   background: rgba(0, 0, 0, 0.1);
@@ -123,6 +134,9 @@ body {
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
+.form-group select{
+  margin-top: 20px;
+}
 .form-group input:focus {
   color: rgba(0, 0, 0, 0.8);
 }
@@ -137,6 +151,7 @@ body {
   background: #019875;
   width: 100%;
   border: 0;
+  margin-top: 20px;
   border-radius: 4px;
   padding: 12px 20px;
   color: #FFFFFF;
@@ -184,49 +199,6 @@ body {
   opacity: 1;
   visibility: visible;
 }
-.form-panel.two {
-  z-index: 5;
-  position: absolute;
-  top: 0;
-  left: 95%;
-  background: #019875;
-  width: 100%;
-  min-height: 100%;
-  padding: 60px calc(10% + 60px) 60px 60px;
-  -webkit-transition: 0.3s ease;
-  transition: 0.3s ease;
-  cursor: pointer;
-}
-.form-panel.two:before, .form-panel.two:after {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 60px;
-  left: 1.5%;
-  background: rgba(255, 255, 255, 0.2);
-  height: 30px;
-  width: 2px;
-  -webkit-transition: 0.3s ease;
-  transition: 0.3s ease;
-}
-.form-panel.two:after {
-  left: 3%;
-}
-.form-panel.two:hover {
-  left: 93%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-.form-panel.two:hover:before, .form-panel.two:hover:after {
-  opacity: 0;
-}
-.form-panel.two.active {
-  left: 10%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  cursor: default;
-}
-.form-panel.two.active:before, .form-panel.two.active:after {
-  opacity: 0;
-}
 .form-header {
   margin: 0 0 40px;
 }
@@ -273,4 +245,24 @@ body {
 .cp-fab {
   background: #FFFFFF !important;
   color: #019875 !important;
+}
+#error{
+  color: #b00000;
+}
+.form-group .message{
+  width: 100%;
+  text-align: center;
+}
+
+/* Новый стиль для разделения на два столбца */
+.form-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.form-columns .form-group {
+  width: calc(50% - 10px);
+}
+.form-group.full-width {
+  width: 100%;
 }
