@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Национальная библиотека Беларуси</title>
+    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/person.css">
+    <link rel="stylesheet" href="css/mainstyle.css">
+</head>
+<body>
+    <header>
+        <div class="header-content" >
+            <a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Main.html">
+            <div class="logo"></div>
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</h1>
+            </a>
+        </div>
+        <div class="header-menu">
+            <ul>
+                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Person.html">Личный кабинет</a></li>
+                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Authorization.html">Вход</a></li>
+            </ul>    
+        </div> 
+    </header>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="Введите текст для поиска">
+        </div>
+        <div class="dropdown">
+            <select>
+                <option>Все поля</option>
+                <option>Автор</option>
+                <option>Название</option>
+            </select>
+        </div>
+        <div class="button">
+            <form action="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Catalog.html">
+                <button>Найти</button>
+            </form>
+        </div>
+    </div>
+        <div class="main-container">
+            <div class="content" id="content">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="sidebar">
+                <div class="profile-block" onclick="showContent('profile')">
+                    <img src="css/pictures/back.jpg" alt="Фото пользователя">
+                    <div>Илья</div>
+                </div>
+                <button onclick="showContent('favorites')">Избранные</button>
+                <button onclick="showContent('orders')">Заказы</button>
+                <button onclick="showContent('orderHistory')">История заказов</button>
+            </div>
+
+        </div>
+        
+
+
+    <script>
+        function showContent(section) {
+            let content = '';
+            switch(section) {
+                case 'profile':
+                    content = '<h2>Профиль</h2><p>Информация о пользователе...</p>';
+                    break;
+                case 'favorites':
+                    content = '<h2>Избранные</h2><p>Список избранных...</p>';
+                    break;
+                case 'orders':
+                    content = '<h2>Заказы</h2><p>Информация о заказах...</p>';
+                    break;
+                case 'orderHistory':
+                    content = '<h2>История заказов</h2><p>История ваших заказов...</p>';
+                    break;
+            }
+            document.getElementById('content').innerHTML = content;
+        }
+    </script>
+</body>
+</html>

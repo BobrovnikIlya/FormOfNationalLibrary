@@ -1,0 +1,167 @@
+body {
+    margin: 0;
+
+    background: linear-gradient(to right,
+        rgb(1,152,114,0.2),
+        rgb(153, 0, 250,0.2)
+    );
+    font-family: Arial, sans-serif;
+}
+header {
+    background: linear-gradient(to right, #019875, #9900fa);
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo {
+    background-image: url("pictures/Logo.png");
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+.header-content a{
+    margin-left: 20px;
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+.header-content a h1 {
+    margin: 0;
+    font-size: 1.2em;
+}
+.header-menu ul{
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    display: flex; 
+    justify-content: flex-end; 
+}
+.header-menu li {
+    margin-left: 20px; 
+}
+.header-menu li a {
+    display: flex;
+    padding: 20px;
+    margin-right: 20px;
+    align-items: center;
+    background-color: none;
+    border-radius: 10px;
+    border: 2px #fff;
+    font-size: 1em;
+    font-weight: bolder;
+    color: #ffffff;
+    text-decoration: none;
+}
+.header-menu li a:hover {
+    background-color: #8200d3;
+}
+.container {
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 20px 100px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    box-shadow:2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.status-bar p{
+    background-color: rgb(246, 246, 246);
+    color: #fff;
+    font-weight: bolder;
+    padding: 15px 20px;
+    border-radius: 10px;
+   display: flex;
+    vertical-align: middle;
+    margin: 20px 0px;
+}
+
+.search-bar, .dropdown, .button {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px 5px;
+}
+.search-bar input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    font-size: 1em;
+}
+.dropdown select {
+    padding: 10px;
+    width: 200px;
+    background-color: #ffffff;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    font-size: 1em;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+.button button {
+    padding: 10px 20px;
+    width: 150px;
+    background-color: #019875;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.button button:hover {
+    background-color: #007459;
+}
+.button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 100px;
+}
+.button-container button {
+    padding: 10px 20px;
+    width: 150px;
+    background-color: #019875;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.button-container button:hover {
+    background-color: #007459;
+}
+
+.text-content {
+    padding: 20px;
+    margin-top: 20px;
+    min-height: 200px;
+}
+
+
+@media (max-width: 768px) {
+    .header-content h1, .login {
+        font-size: 0.9em;
+    }
+    .search-bar input, .dropdown select, .button button {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+}
+@media (max-width: 480px) {
+    .header-content h1, .login {
+        font-size: 0.8em;
+    }
+    .search-bar, .dropdown, .button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+    }
+    .search-bar input, .dropdown select, .button button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

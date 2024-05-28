@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'>
+    <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
+</head>
+<body>
+<div class="form">
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1>Авторизация пользователя</h1>
+        </div>
+        <div class="form-content">
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required="required"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required="required"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Авторизация</button>
+                </div>
+                <div class="form-group">
+                    <a href="/register">Зарегистрироваться</a>
+                </div>
+                <div class="form-group">
+                    <p style="color: red; align-items: center"  th:text="${error}"></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
