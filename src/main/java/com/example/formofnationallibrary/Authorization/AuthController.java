@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class AuthController {
 
-    @Autowired
+    /*@Autowired
     private UserService userService;
     @GetMapping("/authorization")
     public ModelAndView authorization(){
@@ -64,5 +64,5 @@ public class AuthController {
         modelAndView.setViewName("login");
         modelAndView.addObject("message", "Регистрация успешна. Пожалуйста, войдите.");
         return modelAndView;
-    }
+    }*/
 }

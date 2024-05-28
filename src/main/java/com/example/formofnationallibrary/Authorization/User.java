@@ -1,8 +1,7 @@
 package com.example.formofnationallibrary.Authorization;
-import jakarta.persistence.*;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -10,80 +9,32 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_user;
+    private Long id;
 
-    @Column(nullable = false)
-    private String FIO;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date date;
-
-    @Column(nullable = false, unique = true)
-    private String phoneNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "id_role", nullable = false)
-    private Role role;
-
-    @Column(nullable = false, unique = true)
-    private String numberDocument;
-
-    @Column(nullable = false, unique = true)
     private String login;
-
-    @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false, unique = true)
+    private transient String confirmPassword;
     private String email;
 
-    public Long getId_user() {
-        return id_user;
+    @ManyToOne
+    @JoinColumn(name = "id_role")
+    private Role role;
+
+    private String FIO;
+    private LocalDate date;
+    private String phoneNumber;
+    private String numberDocument;
+    private String description;
+
+    // Getters and Setters
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user = id_user;
-    }
-
-    public String getFIO() {
-        return FIO;
-    }
-
-    public void setFIO(String FIO) {
-        this.FIO = FIO;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getNumberDocument() {
-        return numberDocument;
-    }
-
-    public void setNumberDocument(String numberDocument) {
-        this.numberDocument = numberDocument;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -108,5 +59,61 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getFIO() {
+        return FIO;
+    }
+
+    public void setFIO(String FIO) {
+        this.FIO = FIO;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNumberDocument() {
+        return numberDocument;
+    }
+
+    public void setNumberDocument(String numberDocument) {
+        this.numberDocument = numberDocument;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
