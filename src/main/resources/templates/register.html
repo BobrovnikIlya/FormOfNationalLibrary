@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'>
     <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
+
 </head>
 <body>
+<div class="container">
 <div class="form2">
     <div class="form-panel one">
         <div class="form-header">
@@ -74,21 +76,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('/roles')
-            .then(response => response.json())
-            .then(data => {
-                const roleSelect = document.getElementById('role');
-                data.forEach(role => {
-                    const option = document.createElement('option');
-                    option.value = role.id;
-                    option.text = role.name;
-                    roleSelect.add(option);
-                });
-            });
-    });
-</script>
+</div>
 </body>
 </html>

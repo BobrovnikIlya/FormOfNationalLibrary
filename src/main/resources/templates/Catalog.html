@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Национальная библиотека Беларуси</title>
-    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
     <link rel="stylesheet" th:href="@{css/table.css}">
+    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
 </head>
 <body>
 <header>
@@ -17,6 +17,7 @@
     </div>
     <div class="header-menu">
         <ul>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
             <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
@@ -39,24 +40,44 @@
             <button type="submit">Найти</button>
         </div>
     </form>
-    <div class="status-bar">
+    <form th:action="@{/addBook}" method="get">
+    <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+        <button type="submit">Добавить книгу</button>
+    </div>
+    </form>
+        <div class="status-bar">
         <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
     </div>
     <div class="table">
         <table>
             <thead>
             <tr>
+                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
+                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Редактировать</th>
                 <th>Описание</th>
                 <th>Добавить в избранное</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="book : ${books}">
+                <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                    <button type="button" class="delete-btn" data-book-id="${book.id}">
+                        Удалить
+                    </button>
+                </td>
+                <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                    <button type="button">
+                        Редактировать
+                    </button>
+                </td>
                 <td>
                     <a th:href="@{'/book/' + ${book.id}}"
                        th:text="${book.name} + ', ' + ${book.author.name} + ', ' + ${book.year} + ', ' + ${book.pages} + ', ' + ${book.publish.name} + ', ' + ${book.language.name}"></a>
                 </td>
-                <td><button>Заказать</button></td>
+                <td >
+                    <button th:if="${loggedInUser != null}">Добавить</button>
+                    <p th:if="${loggedInUser == null}">Необходимо авторизоваться</p>
+                </td>
             </tr>
             </tbody>
         </table>

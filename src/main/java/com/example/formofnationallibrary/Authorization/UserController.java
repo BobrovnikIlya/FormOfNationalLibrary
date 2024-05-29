@@ -18,6 +18,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @ModelAttribute("loggedInUser")
     public User loggedInUser() {
         return null; // Initialize the session attribute

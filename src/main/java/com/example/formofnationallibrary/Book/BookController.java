@@ -6,9 +6,7 @@ import com.example.formofnationallibrary.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -18,9 +16,20 @@ import java.util.Optional;
 @SessionAttributes("loggedInUser")
 public class BookController {
 
+
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private LanguageService languageService;
+
+    @Autowired
+    private PublishService publishService;
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private CopiesRepository copiesRepository;
 
@@ -47,8 +56,24 @@ public class BookController {
         } else {
             return new ModelAndView("error/404");
         }
+    }
 
+    @GetMapping("/addBook")
+    public ModelAndView showAddBookForm(Model model) {
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        model.addAttribute("loggedIn", true);
 
+        ModelAndView mav = new ModelAndView("AddBook");
+        mav.addObject("book", new Book());
+        mav.addObject("authors", authorService.getAllAuthors());
+        mav.addObject("languages", languageService.getAllLanguages());
+        mav.addObject("publishes", publishService.getAllPublishes());
+        return mav;
+    }
+    @PostMapping("/addBook")
+    public ModelAndView addBook(@ModelAttribute Book book) {
+        bookService.saveBook(book);
+        return new ModelAndView("redirect:/home");
     }
 }
 
