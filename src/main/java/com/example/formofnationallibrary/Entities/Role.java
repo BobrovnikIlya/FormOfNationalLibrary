@@ -1,4 +1,4 @@
-package com.example.formofnationallibrary.Authorization;
+package com.example.formofnationallibrary.Entities;
 
 import jakarta.persistence.*;
 

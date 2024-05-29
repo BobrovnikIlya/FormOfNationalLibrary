@@ -1,64 +1,76 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Национальная библиотека Беларуси</title>
-    <link rel="stylesheet" href="css/mainstyle.css">
-    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
+    <link rel="stylesheet" th:href="@{css/table.css}">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Main.html">
-                <div class="logo"></div>
-                <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</h1>
-            </a>
-        </div>
-        <div class="header-menu">
-            <ul>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Person.html">Личный кабинет</a></li>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Authorization.html">Вход</a></li>
-            </ul>    
-        </div>    
-    </header>
-    <div class="container">
-        <div class="search-bar">
-            <input type="text" placeholder="Введите текст для поиска">
-        </div>
-        <div class="dropdown">
-            <select>
-                <option>Все поля</option>
-                <option>Автор</option>
-                <option>Название</option>
-            </select>
-        </div>
-        <div class="button">
-            <form action="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Catalog.html">
-                <button>Найти</button>
-            </form>
-        </div>
-        <div>
-            <table>
-                <tr>
-                    <th>Заголовок 1</th>
-                    <th>Заголовок 2</th>
-                </tr>
-                <tr>
-                    <td>Ячейка 1</td>
-                    <td>Ячейка 2</td>
-                </tr>
-                <tr>
-                    <td>Ячейка 3</td>
-                    <td>Ячейка 4</td>
-                </tr>
-            </table>
-        </div>
-     
-        <div class="button-container">
-                <button class="button">Заказать</button>
-                <button class="button">В избранное</button>
-        </div>
+<header>
+    <div class="header-content">
+        <a th:href="@{/home}">
+            <div class="logo"></div>
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
     </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <div>
+        <table>
+            <tr>
+                <th>Поле</th>
+                <th>Значение</th>
+            </tr>
+            <tr>
+                <td>Название</td>
+                <td th:text="${book.name}"></td>
+            </tr>
+            <tr>
+                <td>Автор</td>
+                <td th:text="${book.author.name}"></td>
+            </tr>
+            <tr>
+                <td>Год</td>
+                <td th:text="${book.year}"></td>
+            </tr>
+            <tr>
+                <td>Страниц</td>
+                <td th:text="${book.pages}"></td>
+            </tr>
+            <tr>
+                <td>Издательство</td>
+                <td th:text="${book.publish.name}"></td>
+            </tr>
+            <tr>
+                <td>Язык</td>
+                <td th:text="${book.language.name}"></td>
+            </tr>
+            <tr>
+                <td>Описание</td>
+                <td th:text="${book.description}"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table>
+
+        </table>
+    </div>
+
+
+    <div class="button-container">
+        <button class="button">Заказать</button>
+        <button class="button">В избранное</button>
+    </div>
+</div>
 </body>
 </html>

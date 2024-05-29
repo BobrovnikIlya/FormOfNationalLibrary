@@ -1,5 +1,8 @@
 package com.example.formofnationallibrary.Authorization;
 
+import com.example.formofnationallibrary.Entities.Role;
+import com.example.formofnationallibrary.Entities.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +21,7 @@ public class UserController {
 
     @ModelAttribute("loggedInUser")
     public User loggedInUser() {
-        return new User();
+        return null; // Initialize the session attribute
     }
 
     @GetMapping("/register")
@@ -76,8 +79,9 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(SessionStatus status) {
+    public String logout(SessionStatus status, HttpSession session) {
         status.setComplete();
+        session.invalidate();
         return "redirect:/home";
     }
 
@@ -87,6 +91,7 @@ public class UserController {
         return userService.getAllRoles();
     }
 }
+
 
 
 

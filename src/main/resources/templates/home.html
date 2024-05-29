@@ -7,46 +7,46 @@
     <link rel="stylesheet" th:href="@{css/mainstyle.css}">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <a href="/home">
+<header>
+    <div class="header-content">
+        <a href="/home">
             <div class="logo"></div>
-            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</h1>
-            </a>
-        </div>
-        <div class="header-menu">
-            <ul>
-                <li><a href="/person">Личный кабинет</a></li>
-                <li><a href="/authorization">Вход</a></li>
-            </ul>    
-        </div> 
-    </header>
-    <div class="container">
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
+    </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null}"><a href="/person">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a href="/logout">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a href="/login">Вход</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <form th:action="@{/search}" method="get">
         <div class="search-bar">
-            <input type="text" placeholder="Введите текст для поиска">
+            <input type="text" name="query" placeholder="Введите текст для поиска">
         </div>
         <div class="dropdown">
-            <select>
-                <option>Все поля</option>
-                <option>Автор</option>
-                <option>Название</option>
+            <select name="field">
+                <option value="all">Все поля</option>
+                <option value="author">Автор</option>
+                <option value="title">Название</option>
             </select>
         </div>
         <div class="button">
-            <form action="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Catalog.html">
-                <button>Найти</button>
-            </form>
-
+            <button type="submit">Найти</button>
         </div>
-        <div class="text-content">
-            <p><b>Электронный каталог Национальной библиотеки Беларуси</b>
-
-                <p>В фондах Национальной библиотеки Беларуси (НББ) хранится около 10,4 миллионов документов и свыше 650 тысяч цифровых копий.
-                
-                    <p>Поисковой системой для этих информационных ресурсов является Электронный каталог НББ. После авторизации пользователь получает возможность удаленно заказать на читальный зал НББ документы, находящиеся в ее фонде.
-                
-                        <p>Пользователь, находящийся в здании НББ, может получить доступ к ее электронной библиотеке, а также к полным текстам документов из лицензионных баз данных.
-        </div>
+    </form>
+    <div class="text-content">
+        <p><b>Электронный каталог Национальной библиотеки Беларуси</b></p>
+        <p>В фондах Национальной библиотеки Беларуси (НББ) хранится около 10,4 миллионов документов и свыше 650 тысяч цифровых копий.</p>
+        <p>Поисковой системой для этих информационных ресурсов является Электронный каталог НББ. После авторизации пользователь получает возможность удаленно заказать на читальный зал НББ документы, находящиеся в ее фонде.</p>
+        <p>Пользователь, находящийся в здании НББ, может получить доступ к ее электронной библиотеке, а также к полным текстам документов из лицензионных баз данных.</p>
     </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="js/index.js"></script>
 </body>
 </html>
+

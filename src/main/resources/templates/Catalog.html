@@ -4,57 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Национальная библиотека Беларуси</title>
-    <link rel="stylesheet" href="css/mainstyle.css">
-    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
+    <link rel="stylesheet" th:href="@{css/table.css}">
 </head>
 <body>
-    <header>
-        <div class="header-content" >
-            <a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Main.html">
+<header>
+    <div class="header-content">
+        <a th:href="@{/home}">
             <div class="logo"></div>
-            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</h1>
-            </a>
-        </div>
-        <div class="header-menu">
-            <ul>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Person.html">Личный кабинет</a></li>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Authorization.html">Вход</a></li>
-            </ul>    
-        </div> 
-    </header>
-    <div class="container">
-        <div class="search-bar">
-            <input type="text" placeholder="Введите текст для поиска">
-        </div>
-        <div class="dropdown">
-            <select>
-                <option>Все поля</option>
-                <option>Автор</option>
-                <option>Название</option>
-            </select>
-        </div>
-        <div class="button">
-            <form action="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Catalog.html">
-                <button>Найти</button>
-            </form>
-        </div>
-        <div class = "status-bar">
-            <p>Пушкин
-        </div>
-        <div class = "table">
-            <table>
-                <tr>
-                    <th>Выбрать</th>
-                    <th>Описание</th>
-                    <th>Добавить в избранное</th>
-                </tr>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Book.html">Sample Text 1</a></td>
-                    <td><button>Добавить</button></td>
-                </tr>
-            </table>
-        </div>
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
     </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <div class="search-bar">
+        <form th:action="@{/search}" method="get">
+            <input type="text" name="query" placeholder="Введите текст для поиска">
+            <select name="field">
+                <option value="all">Все поля</option>
+                <option value="author">Автор</option>
+                <option value="title">Название</option>
+            </select>
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+    <div class="status-bar">
+        <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
+    </div>
+    <div class="table">
+        <table>
+            <thead>
+            <tr>
+                <th>Выбрать</th>
+                <th>Описание</th>
+                <th>Добавить в избранное</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td><input type="checkbox"></td>
+                <td>
+                    <a th:href="@{'/book/' + ${book.id}}"
+                       th:text="${book.name} + ', ' + ${book.author.name} + ', ' + ${book.year} + ', ' + ${book.pages} + ', ' + ${book.publish.name} + ', ' + ${book.language.name}"></a>
+                </td>
+                <td><button>Добавить</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
