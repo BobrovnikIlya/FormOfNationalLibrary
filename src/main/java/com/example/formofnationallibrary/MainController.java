@@ -11,17 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @SessionAttributes("loggedInUser")
 public class MainController {
-    @GetMapping("/home")
-    public ModelAndView home(Model model) {
-        // Проверяем, есть ли залогиненный пользователь в сессии
-        User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
-            model.addAttribute("loggedIn", true);
-        } else {
-            model.addAttribute("loggedIn", false);
-        }
-        return new ModelAndView("Home");
-    }
+
     @GetMapping("/person")
     public ModelAndView person(Model model){
         ModelAndView modelAndView = new ModelAndView("Person");

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Национальная библиотека Беларуси</title>
+    <link rel="stylesheet" th:href="@{css/table.css}">
+    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
+    <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <a th:href="@{/home}">
+            <div class="logo"></div>
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
+    </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
+        </ul>
+    </div>
+</header>
+<div class="form2">
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1>Добавление языка</h1>
+        </div>
+        <div class="form-content">
+            <form action="/addLanguage" method="post" th:object="${language}">
+                    <div class="form-group">
+                        <label for="name">Наименование языка</label>
+                        <input type="text" id="name" th:field="*{name}" required="required"/>
+                    </div>
+
+                <div class="form-group full-width">
+                    <button type="submit">Добавить язык</button>
+                </div>
+            </form>
+            <div class="form-group">
+                <div class="message">
+                    <a href="/addBook">Добавить книгу</a>
+                </div>
+                <div class="message">
+                    <a href="/addPublish">Добавить издательство</a>
+                </div>
+                <div class="message">
+                    <a href="/addLanguage">Добавить язык</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

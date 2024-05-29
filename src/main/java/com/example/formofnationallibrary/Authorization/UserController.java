@@ -24,6 +24,18 @@ public class UserController {
         return null; // Initialize the session attribute
     }
 
+    @GetMapping("/home")
+    public ModelAndView home(Model model) {
+        // Проверяем, есть ли залогиненный пользователь в сессии
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            model.addAttribute("loggedIn", true);
+        } else {
+            model.addAttribute("loggedIn", false);
+        }
+        return new ModelAndView("Home");
+    }
+
     @GetMapping("/register")
     public ModelAndView showRegistrationForm() {
         ModelAndView mav = new ModelAndView("register");
