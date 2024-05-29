@@ -20,7 +20,7 @@ th {
     text-decoration: underline; 
     color: #019875;
 }
-.table button {
+.table td button {
     padding: 10px 20px;
     width: 150px;
     background-color: #fff;
@@ -30,7 +30,7 @@ th {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-.table button:hover {
+.table td button:hover {
     background-color: #019875;
     color: #ffffff;
 }

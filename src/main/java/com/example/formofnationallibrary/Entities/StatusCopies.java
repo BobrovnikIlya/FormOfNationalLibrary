@@ -3,20 +3,21 @@ package com.example.formofnationallibrary.Entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "status_copies")
 public class StatusCopies {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idStatusCopies;
+    private Long id_status_copies;
     private String status;
 
     // getters and setters
     public Long getIdStatusCopies() {
-        return idStatusCopies;
+        return id_status_copies;
     }
 
     public void setIdStatusCopies(Long idStatusCopies) {
-        this.idStatusCopies = idStatusCopies;
+        this.id_status_copies = idStatusCopies;
     }
 
     public String getStatus() {

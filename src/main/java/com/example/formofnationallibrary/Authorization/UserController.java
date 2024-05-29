@@ -18,7 +18,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @ModelAttribute("loggedInUser")
     public User loggedInUser() {
         return null; // Initialize the session attribute
@@ -79,9 +78,8 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(SessionStatus status, HttpSession session) {
+    public String logout(SessionStatus status) {
         status.setComplete();
-        session.invalidate();
         return "redirect:/home";
     }
 

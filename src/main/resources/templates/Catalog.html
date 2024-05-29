@@ -24,17 +24,21 @@
     </div>
 </header>
 <div class="container">
-    <div class="search-bar">
-        <form th:action="@{/search}" method="get">
+    <form th:action="@{/search}" method="get">
+        <div class="search-bar">
             <input type="text" name="query" placeholder="Введите текст для поиска">
+        </div>
+        <div class="dropdown">
             <select name="field">
                 <option value="all">Все поля</option>
                 <option value="author">Автор</option>
                 <option value="title">Название</option>
             </select>
+        </div>
+        <div class="button">
             <button type="submit">Найти</button>
-        </form>
-    </div>
+        </div>
+    </form>
     <div class="status-bar">
         <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
     </div>
@@ -42,19 +46,17 @@
         <table>
             <thead>
             <tr>
-                <th>Выбрать</th>
                 <th>Описание</th>
                 <th>Добавить в избранное</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="book : ${books}">
-                <td><input type="checkbox"></td>
                 <td>
                     <a th:href="@{'/book/' + ${book.id}}"
                        th:text="${book.name} + ', ' + ${book.author.name} + ', ' + ${book.year} + ', ' + ${book.pages} + ', ' + ${book.publish.name} + ', ' + ${book.language.name}"></a>
                 </td>
-                <td><button>Добавить</button></td>
+                <td><button>Заказать</button></td>
             </tr>
             </tbody>
         </table>

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Национальная библиотека Беларуси</title>
-    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
-    <link rel="stylesheet" th:href="@{css/table.css}">
+    <link rel="stylesheet" th:href="@{/css/mainstyle.css}">
+    <link rel="stylesheet" th:href="@{/css/table.css}">
 </head>
 <body>
 <header>
@@ -24,6 +24,22 @@
     </div>
 </header>
 <div class="container">
+    <form th:action="@{/search}" method="get">
+        <div class="search-bar">
+            <input type="text" name="query" placeholder="Введите текст для поиска">
+        </div>
+        <div class="dropdown">
+            <select name="field">
+                <option value="all">Все поля</option>
+                <option value="author">Автор</option>
+                <option value="title">Название</option>
+            </select>
+        </div>
+        <div class="button">
+            <button type="submit">Найти</button>
+        </div>
+    </form>
+    <h2>Описание</h2>
     <div>
         <table>
             <tr>
@@ -60,15 +76,28 @@
             </tr>
         </table>
     </div>
+    <h2>Экземпляры</h2>
     <div>
         <table>
-
+            <thead>
+            <tr>
+                <th>Шифр</th>
+                <th>Место нахождения</th>
+                <th>Статус</th>
+                <th>Заказать</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="copy : ${copiesList}">
+                <td th:text="${copy.cipher}"></td>
+                <td th:text="${copy.location.place}"></td>
+                <td th:text="${copy.statusCopies.status}"></td>
+                <td><button>Добавить</button></td>
+            </tr>
+            </tbody>
         </table>
     </div>
-
-
     <div class="button-container">
-        <button class="button">Заказать</button>
         <button class="button">В избранное</button>
     </div>
 </div>

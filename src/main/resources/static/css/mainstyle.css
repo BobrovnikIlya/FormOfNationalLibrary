@@ -69,7 +69,10 @@ header {
 }
 
 .status-bar p{
-    background-color: rgb(246, 246, 246);
+    background: linear-gradient(to right,
+    rgb(1,152,114,0.7),
+    rgb(153, 0, 250,0.7)
+    );
     color: #fff;
     font-weight: bolder;
     padding: 15px 20px;
@@ -116,21 +119,23 @@ header {
 }
 .button-container {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px 100px;
+    justify-content: center;  /* Центрирование по горизонтали */
+    align-items: center;      /* Центрирование по вертикали */
+    width: 100%;
+    margin: 10px 0;           /* Обновленное значение для равномерного отступа */
 }
+
 .button-container button {
     padding: 10px 20px;
-    width: 150px;
     background-color: #019875;
     border-radius: 10px;
+    width: 50%;
     color: #fff;
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 .button-container button:hover {
     background-color: #007459;
 }

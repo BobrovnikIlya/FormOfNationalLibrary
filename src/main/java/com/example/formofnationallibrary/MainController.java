@@ -1,19 +1,36 @@
 package com.example.formofnationallibrary;
 
+import com.example.formofnationallibrary.Entities.User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
+@SessionAttributes("loggedInUser")
 public class MainController {
     @GetMapping("/home")
-    public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView("Home");
-        return modelAndView;
+    public ModelAndView home(Model model) {
+        // Проверяем, есть ли залогиненный пользователь в сессии
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            model.addAttribute("loggedIn", true);
+        } else {
+            model.addAttribute("loggedIn", false);
+        }
+        return new ModelAndView("Home");
     }
     @GetMapping("/person")
-    public ModelAndView person(){
+    public ModelAndView person(Model model){
         ModelAndView modelAndView = new ModelAndView("Person");
-        return modelAndView;
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            model.addAttribute("loggedIn", true);
+        } else {
+            model.addAttribute("loggedIn", false);
+        }
+        return new ModelAndView("Person");
     }
 }
