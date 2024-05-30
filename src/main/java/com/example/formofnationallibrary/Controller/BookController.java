@@ -268,17 +268,27 @@ public class BookController {
             return new ModelAndView("error/404");
         }
         Book book = bookOptional.get();
+
+        // Проверяем, есть ли пользователь уже в очереди на данную книгу
+        Optional<Queue> existingQueueOptional = queueRepository.findByUserIdAndBookId(loggedInUser.getId(), bookId);
+        if (existingQueueOptional.isPresent()) {
+            // Если пользователь уже в очереди, не создаем новую запись
+            return new ModelAndView("redirect:/book/" + bookId);
+        }
+
+        // Если пользователь не в очереди, создаем новую запись
         List<Queue> queueList = queueRepository.findByBookIdOrderByQueueNumberDesc(bookId);
         int queueNumber = queueList.isEmpty() ? 1 : queueList.get(0).getQueueNumber() + 1;
 
         Queue queue = new Queue();
         queue.setUserId(loggedInUser.getId());
-        queue.setBook(book); // передача объекта Book
+        queue.setBook(book);
         queue.setQueueNumber(queueNumber);
         queue.setDateNotification(null); // или установить дату, если требуется
         queueRepository.save(queue);
 
         return new ModelAndView("redirect:/book/" + bookId);
     }
+
 }
 
