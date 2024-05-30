@@ -77,7 +77,7 @@ public class BookController {
     @GetMapping("/addBook")
     public ModelAndView showAddBookForm(Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
             model.addAttribute("loggedIn", true);
 
             ModelAndView mav = new ModelAndView("AddBook");
@@ -113,7 +113,7 @@ public class BookController {
     @GetMapping("/addAuthor")
     public ModelAndView showAddAuthorForm(Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
         model.addAttribute("loggedIn", true);
         ModelAndView mav = new ModelAndView("AddAuthor");
         mav.addObject("author", new Author());
@@ -131,7 +131,7 @@ public class BookController {
     @GetMapping("/addPublish")
     public ModelAndView showAddPublishForm(Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
             model.addAttribute("loggedIn", true);
             ModelAndView mav = new ModelAndView("AddPublish");
             mav.addObject("publish", new Publish());
@@ -148,7 +148,7 @@ public class BookController {
     @GetMapping("/addLanguage")
     public ModelAndView showAddLanguageForm(Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
             model.addAttribute("loggedIn", true);
             ModelAndView mav = new ModelAndView("AddLanguage");
             mav.addObject("language", new Language());
@@ -166,7 +166,7 @@ public class BookController {
     @GetMapping("/addCopies")
     public ModelAndView showAddCopiesForm(Model model, @RequestParam Long bookId) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
             model.addAttribute("loggedIn", true);
 
             ModelAndView mav = new ModelAndView("AddCopies");
@@ -192,7 +192,7 @@ public class BookController {
     public ModelAndView addCopies(@ModelAttribute Copies copies, @RequestParam Long bookId) {
         // Установка книги для копии
         Book book = bookRepository.findById(bookId).orElse(null);
-        if (book == null) {
+        if (book == null ) {
             // Обработка случая, если книга не найдена
             return new ModelAndView("error/404");
         }

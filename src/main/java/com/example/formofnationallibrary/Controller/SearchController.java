@@ -70,7 +70,7 @@ public class SearchController {
     @GetMapping("/changeBook")
     public ModelAndView changeBook(@RequestParam Long bookId, Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null) {
+        if (loggedInUser != null && loggedInUser.getRole().getName().equals("Admin")) {
             Book book = bookRepository.findById(bookId).orElse(null);
             ModelAndView mav = new ModelAndView("ChangeBook");
             mav.addObject("book", book);

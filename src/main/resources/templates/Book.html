@@ -17,7 +17,7 @@
     </div>
     <div class="header-menu">
         <ul>
-            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/accounts}">Пользователи</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
             <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
@@ -25,35 +25,34 @@
     </div>
 </header>
 <div class="container">
-    <form th:action="@{/search}" method="get">
-        <div class="search-bar">
-            <input type="text" name="query" placeholder="Введите текст для поиска">
+    <div class="button-container">
+        <div class="search-container">
+            <form th:action="@{/search}" method="get">
+                <div class="search-bar">
+                    <input type="text" name="query" placeholder="Введите текст для поиска">
+                </div>
+                <div class="dropdown">
+                    <select name="field">
+                        <option value="all">Все поля</option>
+                        <option value="author">Автор</option>
+                        <option value="title">Название</option>
+                    </select>
+                </div>
+                <div class="button">
+                    <button type="submit">Найти</button>
+                </div>
+            </form>
         </div>
-        <div class="dropdown">
-            <select name="field">
-                <option value="all">Все поля</option>
-                <option value="author">Автор</option>
-                <option value="title">Название</option>
-            </select>
+        <div class="add-book-container">
+            <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
+                <form th:action="@{/addCopies}" method="get">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <button type="submit" class="edit-btn">Добавить экземпляр</button>
+                </form>
+            </div>
         </div>
-        <div class="button">
-            <button type="submit">Найти</button>
-        </div>
-    </form>
-    <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
-        <form th:action="@{/deleteBook}" method="post">
-                <input type="hidden" name="bookId" th:value="${book.id}">
-                <button type="submit">Удалить</button>
-        </form>
-        <form th:action="@{/changeBook}" method="get">
-            <input type="hidden" name="bookId" th:value="${book.id}">
-            <button type="submit" class="edit-btn">Редактировать</button>
-        </form>
-        <form th:action="@{/addCopies}" method="get">
-            <input type="hidden" name="bookId" th:value="${book.id}">
-            <button type="submit" class="edit-btn">Добавить экземпляр</button>
-        </form>
     </div>
+
     <h2>Описание</h2>
     <div class="table">
         <table>
@@ -125,11 +124,27 @@
             </tbody>
         </table>
     </div>
-    <div class="button-container" th:if="${loggedInUser != null }">
-        <form th:action="@{/addFavorite}" method="post">
-            <input type="hidden" name="bookId" th:value="${book.id}">
-            <button class="button" type="submit">Добавить в избранное</button>
-        </form>
+    <div class="button-container">
+        <div class="button-group">
+            <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
+                <form th:action="@{/deleteBook}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </div>
+            <div th:if="${loggedInUser != null}">
+                <form th:action="@{/addFavorite}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <button class="button" type="submit">Добавить в избранное</button>
+                </form>
+            </div>
+            <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
+                <form th:action="@{/changeBook}" method="get">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <button type="submit" class="edit-btn">Редактировать</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>

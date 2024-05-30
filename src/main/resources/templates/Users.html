@@ -44,51 +44,37 @@
             </form>
         </div>
         <div class="add-book-container">
-            <form th:action="@{/addBook}" method="get">
-                <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
-                    <button type="submit">Добавить книгу</button>
-                </div>
-            </form>
+                <form th:action="@{/register}" method="get">
+                    <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                        <button type="submit">Добавить пользователя</button>
+                    </div>
+                </form>
         </div>
     </div>
-    <div class="status-bar">
-        <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
+        <div class="status-bar">
+        <p th:text="'Результаты поиска: ' + ${users.size()}"></p>
     </div>
     <div class="table">
         <table>
             <thead>
             <tr>
                 <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
-                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Редактировать</th>
-                <th>Описание</th>
-                <th>Добавить в избранное</th>
+                <th>Пользователь</th>
+                <th>Логин</th>
+                <th>Пароль</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="book : ${books}">
-                <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
-                    <form th:action="@{/deleteBook}" method="post">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
+            <tr th:each="user : ${users}">
+                <td>
+                    <form th:action="@{/deleteUser}" method="post">
+                        <input type="hidden" name="userId" th:value="${user.id}">
                         <button type="submit" class="delete-btn">Удалить</button>
                     </form>
                 </td>
-                <td th:if="${loggedInUser != null && loggedInUser.role.name == 'Admin'}">
-                    <form th:action="@{/changeBook}" method="get">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
-                        <button type="submit" class="edit-btn">Редактировать</button>
-                    </form>
-                </td>
-                <td>
-                    <a th:href="@{'/book/' + ${book.id}}"
-                       th:text="${book.name} + ', ' + ${book.author.name} + ', ' + ${book.year} + ', ' + ${book.pages} + ', ' + ${book.publish.name} + ', ' + ${book.language.name}"></a>
-                </td>
-                <td >
-                    <form th:if="${loggedInUser != null}" th:action="@{/addFavorite}" method="post">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
-                        <button type="submit">Добавить</button>
-                    </form>
-                    <p th:if="${loggedInUser == null}">Необходимо авторизоваться</p>
-                </td>
+                <td th:text="${user.FIO} + ', ' + ${user.date}+ ', ' +${user.phoneNumber} + ', ' +${user.numberDocument}"></td>
+                <td th:text="${user.login}"></td>
+                <td th:text="${user.password}"></td>
             </tr>
             </tbody>
         </table>

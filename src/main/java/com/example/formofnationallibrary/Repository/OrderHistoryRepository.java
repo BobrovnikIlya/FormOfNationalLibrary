@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long> {
     List<OrderHistory> findByUserId(Long userId);
+    void deleteByUserId(Long userId);
 }
 
 

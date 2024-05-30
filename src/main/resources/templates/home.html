@@ -16,7 +16,7 @@
     </div>
     <div class="header-menu">
         <ul>
-            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/accounts}">Пользователи</a></li>
             <li th:if="${loggedInUser != null}"><a href="/person">Личный кабинет</a></li>
             <li th:if="${loggedInUser != null}"><a href="/logout">Выход</a></li>
             <li th:if="${loggedInUser == null}"><a href="/login">Вход</a></li>

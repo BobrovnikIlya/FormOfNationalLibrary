@@ -11,4 +11,5 @@ public interface QueueRepository extends JpaRepository<Queue, Long> {
     List<Queue> findByUserId(Long userId);
     List<Queue> findByBookIdAndQueueNumberGreaterThan(Long bookId, int queueNumber);
     Optional<Queue> findByUserIdAndBookId(Long userId, Long bookId);
+    void deleteByUserId(Long userId);
 }

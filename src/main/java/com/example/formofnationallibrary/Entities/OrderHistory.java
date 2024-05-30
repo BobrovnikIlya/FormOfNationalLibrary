@@ -10,7 +10,7 @@ import java.util.Date;
 public class OrderHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_order")
+    @Column(name = "id_order_history")
     private Long id;
 
     @ManyToOne

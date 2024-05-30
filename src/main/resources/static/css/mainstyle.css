@@ -117,16 +117,24 @@ header {
 }
 .button-container {
     display: flex;
+    justify-content: space-between;  /* Центрирование по горизонтали */
+    align-items: center;      /* Центрирование по вертикали */
+    width: 100%;
+    margin: 10px 0;           /* Обновленное значение для равномерного отступа */
+}
+.button-container-copies {
+    display: flex;
     justify-content: center;  /* Центрирование по горизонтали */
     align-items: center;      /* Центрирование по вертикали */
     width: 100%;
     margin: 10px 0;           /* Обновленное значение для равномерного отступа */
 }
+
 .button-container button {
     padding: 10px 20px;
     background-color: #019875;
     border-radius: 10px;
-    width: 400px;
+    width: 300px;
     color: #fff;
     font-size: 1em;
     cursor: pointer;
@@ -163,3 +171,69 @@ header {
         box-sizing: border-box;
     }
 }
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.add-book-container {
+    margin-left: auto;
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    font-size: 1em;
+}
+
+.dropdown select {
+    padding: 10px;
+    width: 200px;
+    background-color: #ffffff;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    font-size: 1em;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.button button {
+    padding: 10px 20px;
+    background-color: #019875;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button button:hover {
+    background-color: #007459;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.button-container form {
+    margin: 0;
+}
+
+.button-container button {
+    margin: 0;
+}
+.button-group .button {
+    margin-right: 20px; /* Отступ между кнопками */
+}
+

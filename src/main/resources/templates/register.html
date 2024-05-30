@@ -4,12 +4,27 @@
     <meta charset="UTF-8">
     <title>Регистрация пользователя</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons'>
     <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
-
+    <link rel="stylesheet" th:href="@{css/table.css}">
+    <link rel="stylesheet" th:href="@{css/mainstyle.css}">
 </head>
 <body>
-<div class="container">
+<header>
+    <div class="header-content">
+        <a th:href="@{/home}">
+            <div class="logo"></div>
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
+    </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/accounts}">Пользователи</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
+        </ul>
+    </div>
+</header>
 <div class="form2">
     <div class="form-panel one">
         <div class="form-header">
@@ -67,15 +82,12 @@
                 </div>
                 <div class="form-group">
                     <div class="message">
-                        <a href="/login">Авторизоваться</a>
-                        <br>
                         <p th:text="${message}"></p>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

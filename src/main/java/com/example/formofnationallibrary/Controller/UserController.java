@@ -73,6 +73,7 @@ public class UserController {
         userService.registerUser(user);
         mav.addObject("message", "Регистрация успешна!");
         mav.addObject("roles", userService.getAllRoles());
+        mav.setViewName("redirect:/accounts");
         return mav;
     }
 
