@@ -11,6 +11,15 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    public List<Order> findByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+    public Order findById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+    public void removeById(Long orderId) {
+        orderRepository.deleteById(orderId);
+    }
 
     public List<Order> getUserOrders(Long userId) {
         return orderRepository.findOrdersByUserId(userId);

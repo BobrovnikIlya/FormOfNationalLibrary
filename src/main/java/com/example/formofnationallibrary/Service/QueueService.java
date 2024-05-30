@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QueueService {
@@ -19,7 +20,17 @@ public class QueueService {
     public List<Queue> findQueueByBookId(Long bookId) {
         return queueRepository.findByBookIdOrderByQueueNumberDesc(bookId);
     }
-    public List<Queue> getUserQueue(Long userId) {
-        return queueRepository.findQueueByUserId(userId);
+    public Optional<Queue> findById(Long id) {
+        return queueRepository.findById(id);
+    }
+
+    public List<Queue> findByBookIdAndQueueNumberGreaterThan(Long bookId, int queueNumber) {
+        return queueRepository.findByBookIdAndQueueNumberGreaterThan(bookId, queueNumber);
+    }
+    public List<Queue> findByUserId(Long userId) {
+        return queueRepository.findByUserId(userId);
+    }
+    public void removeById(Long queueId) {
+        queueRepository.deleteById(queueId);
     }
 }

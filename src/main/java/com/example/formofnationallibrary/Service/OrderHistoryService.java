@@ -11,8 +11,10 @@ public class OrderHistoryService {
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;
-
-    public List<OrderHistory> getUserOrderHistory(Long userId) {
-        return orderHistoryRepository.findOrderHistoryByUserId(userId);
+    public void save(OrderHistory orderHistory) {
+        orderHistoryRepository.save(orderHistory);
+    }
+    public List<OrderHistory> findByUserId(Long userId) {
+        return orderHistoryRepository.findByUserId(userId);
     }
 }

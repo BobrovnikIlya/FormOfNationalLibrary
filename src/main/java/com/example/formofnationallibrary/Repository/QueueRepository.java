@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface QueueRepository extends JpaRepository<Queue, Long> {
     List<Queue> findByBookIdOrderByQueueNumberDesc(Long bookId);
-    List<Queue> findQueueByUserId(Long userId);
+    List<Queue> findByUserId(Long userId);
+    List<Queue> findByBookIdAndQueueNumberGreaterThan(Long bookId, int queueNumber);
 }

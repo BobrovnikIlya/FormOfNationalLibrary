@@ -43,9 +43,13 @@
     </form>
 </div>
 <div class="main-container">
-    <div class="content" id="content">
-        <!-- Content will be loaded here -->
-    </div>
+    <div class="content">
+        <div class="table" id="content" >
+
+            <!-- Content will be loaded here -->
+            </div>
+        </div>
+
     <div class="sidebar">
         <button onclick="showContent('profile')">Профиль</button>
         <button onclick="showContent('favorites')">Избранные</button>
@@ -93,7 +97,8 @@
                         };
                         // Формируем HTML для таблицы
                         content = '<h2>Профиль</h2>' +
-                            '<table>';
+                            '<table>'+
+                            '<tr><th>Поле</th><th>Значение</th></tr>';;
                         // Перебираем свойства объекта пользователя и добавляем их в таблицу
                         for (const key in loggedInUser) {
                             // Пропускаем вывод ID пользователя и confirmPassword
@@ -114,19 +119,61 @@
                     })
                     .catch(error => console.error('Ошибка получения информации о пользователе:', error));
                 break;
-
-            /*case 'orders':
-                // Отобразить заказы пользователя
-                content = '<h2>Заказы</h2>';
+            case 'orders':
+                fetch('/getOrders')
+                    .then(response => response.json())
+                    .then(data => {
+                        content = '<h2>Заказы</h2>' +
+                            '<table>' +
+                            '<tr><th>Название книги</th><th>Шифр экземпляра</th><th>Дата выдачи</th><th>Дата возврата</th><th>Действие</th></tr>';
+                        data.orders.forEach(order => {
+                            content += '<tr><td>' + order.bookName + '</td>' +
+                                '<td>' + order.cipher + '</td>' +
+                                '<td>' + order.issueDate + '</td>' +
+                                '<td>' + order.returnDate + '</td>' +
+                                '<td><button onclick="removeOrder(' + order.id + ')">Убрать заказ</button></td></tr>';
+                        });
+                        content += '</table>';
+                        document.getElementById('content').innerHTML = content;
+                    })
+                    .catch(error => console.error('Ошибка получения заказов:', error));
                 break;
             case 'orderHistory':
-                // Отобразить историю заказов пользователя
-                content = '<h2>История заказов</h2>';
+                fetch('/getOrderHistory')
+                    .then(response => response.json())
+                    .then(data => {
+                        content = '<h2>История заказов</h2>' +
+                            '<table>' +
+                            '<tr><th>Название книги</th><th>Шифр экземпляра</th><th>Дата выдачи</th><th>Дата возврата</th></tr>';
+                        data.orderHistory.forEach(order => {
+                            content += '<tr><td>' + order.bookName + '</td>' +
+                                '<td>' + order.cipher + '</td>' +
+                                '<td>' + order.issueDate + '</td>' +
+                                '<td>' + order.returnDate + '</td></tr>';
+                        });
+                        content += '</table>';
+                        document.getElementById('content').innerHTML = content;
+                    })
+                    .catch(error => console.error('Ошибка получения истории заказов:', error));
                 break;
+
             case 'queues':
-                // Отобразить очередь пользователя
-                content = '<h2>Очередь</h2>';
-                break;*/
+                fetch('/getQueue')
+                    .then(response => response.json())
+                    .then(data => {
+                        content = '<h2>Очередь</h2>' +
+                            '<table>' +
+                            '<tr><th>Название книги</th><th>Номер в очереди</th><th>Действие</th></tr>';
+                        data.queue.forEach(queueItem => {
+                            content += '<tr><td>' + queueItem.bookName + '</td>' +
+                                '<td>' + queueItem.queueNumber + '</td>' +
+                                '<td><button onclick="leaveQueue(' + queueItem.queueId + ')">Уйти из очереди</button></td></tr>';
+                        });
+                        content += '</table>';
+                        document.getElementById('content').innerHTML = content;
+                    })
+                    .catch(error => console.error('Ошибка получения очереди:', error));
+                break;
         }
     }
     function removeFromFavorites(favoriteId) {
@@ -144,6 +191,38 @@
                 }
             })
             .catch(error => console.error('Ошибка удаления из избранного:', error));
+    }
+    function removeOrder(orderId) {
+        fetch('/removeOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: orderId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showContent('orders');
+                }
+            })
+            .catch(error => console.error('Ошибка удаления заказа:', error));
+    }
+    function leaveQueue(queueId) {
+        fetch('/leaveQueue', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: queueId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showContent('queues');
+                }
+            })
+            .catch(error => console.error('Ошибка выхода из очереди:', error));
     }
     </script>
 </body>
