@@ -108,7 +108,13 @@
                 <td th:text="${copy.cipher}"></td>
                 <td th:text="${copy.location.place}"></td>
                 <td th:text="${copy.statusCopies.status}"></td>
-                <td th:if="${loggedInUser != null}"><button>Заказать</button></td>
+                <td th:if="${loggedInUser != null}">
+                    <form th:action="${'Свободен'.equals(copy.statusCopies.status) ? '/orderBook' : '/queueBook'}" method="post">
+                        <input type="hidden" name="copiesId" th:value="${copy.idCopies}">
+                        <input type="hidden" name="bookId" th:value="${book.id}">
+                        <button type="submit" th:text="${'Свободен'.equals(copy.statusCopies.status) ? 'Заказать' : 'В очередь'}"></button>
+                    </form>
+                </td>
                 <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
                     <form th:action="@{/deleteCopie}" method="post">
                         <input type="hidden" name="copiesId" th:value="${copy.idCopies}">

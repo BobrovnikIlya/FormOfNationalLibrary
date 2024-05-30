@@ -1,7 +1,7 @@
-package com.example.formofnationallibrary.Book;
+package com.example.formofnationallibrary.Service;
 
 import com.example.formofnationallibrary.Entities.Author;
-import com.example.formofnationallibrary.Entities.Book;
+import com.example.formofnationallibrary.Repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

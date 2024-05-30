@@ -1,13 +1,16 @@
-package com.example.formofnationallibrary.Authorization;
+package com.example.formofnationallibrary.Service;
 
 import com.example.formofnationallibrary.Entities.Role;
 import com.example.formofnationallibrary.Entities.User;
+import com.example.formofnationallibrary.Repository.RoleRepository;
+import com.example.formofnationallibrary.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,6 +29,9 @@ public class UserService {
         user.setPassword(encryptPassword(user.getPassword()));
         // Save user
         return userRepository.save(user);
+    }
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     public List<Role> getAllRoles() {

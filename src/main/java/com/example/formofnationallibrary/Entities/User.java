@@ -6,9 +6,18 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "users")
 public class User {
+    public User(String email, String FIO, String phoneNumber) {
+        this.email = email;
+        this.FIO = FIO;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Long id;
 
     private String login;
@@ -25,7 +34,6 @@ public class User {
     private String phoneNumber;
     private String numberDocument;
     private String description;
-
     // Getters and Setters
 
 

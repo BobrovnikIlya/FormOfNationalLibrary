@@ -1,10 +1,10 @@
-package com.example.formofnationallibrary.Book;
+package com.example.formofnationallibrary.Repository;
 
-import com.example.formofnationallibrary.Entities.Author;
+import com.example.formofnationallibrary.Entities.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface LanguageRepository extends JpaRepository<Language, Long> {
     // Дополнительные методы, если необходимо
 }

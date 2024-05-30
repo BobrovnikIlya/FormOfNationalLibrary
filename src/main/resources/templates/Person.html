@@ -9,74 +9,137 @@
     <link rel="stylesheet" href="css/mainstyle.css">
 </head>
 <body>
-    <header>
-        <div class="header-content" >
-            <a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Main.html">
+<header>
+    <div class="header-content">
+        <a th:href="@{/home}">
             <div class="logo"></div>
-            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</h1>
-            </a>
-        </div>
-        <div class="header-menu">
-            <ul>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Person.html">Личный кабинет</a></li>
-                <li><a href="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Authorization.html">Вход</a></li>
-            </ul>    
-        </div> 
-    </header>
-    <div class="container">
+            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
+        </a>
+    </div>
+    <div class="header-menu">
+        <ul>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
+            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <form th:action="@{/search}" method="get">
         <div class="search-bar">
-            <input type="text" placeholder="Введите текст для поиска">
+            <input type="text" name="query" placeholder="Введите текст для поиска">
         </div>
         <div class="dropdown">
-            <select>
-                <option>Все поля</option>
-                <option>Автор</option>
-                <option>Название</option>
+            <select name="field">
+                <option value="all">Все поля</option>
+                <option value="author">Автор</option>
+                <option value="title">Название</option>
             </select>
         </div>
         <div class="button">
-            <form action="C:/Users/vange/OneDrive/Рабочий стол/GraduationProject/Site/Catalog.html">
-                <button>Найти</button>
-            </form>
+            <button type="submit">Найти</button>
         </div>
+    </form>
+</div>
+<div class="main-container">
+    <div class="content" id="content">
+        <!-- Content will be loaded here -->
     </div>
-        <div class="main-container">
-            <div class="content" id="content">
-                <!-- Content will be loaded here -->
-            </div>
-            <div class="sidebar">
-                <div class="profile-block" onclick="showContent('profile')">
-                    <img src="css/pictures/back.jpg" alt="Фото пользователя">
-                    <div>Илья</div>
-                </div>
-                <button onclick="showContent('favorites')">Избранные</button>
-                <button onclick="showContent('orders')">Заказы</button>
-                <button onclick="showContent('orderHistory')">История заказов</button>
-            </div>
+    <div class="sidebar">
+        <button onclick="showContent('profile')">Профиль</button>
+        <button onclick="showContent('favorites')">Избранные</button>
+        <button onclick="showContent('orders')">Заказы</button>
+        <button onclick="showContent('orderHistory')">История заказов</button>
+        <button onclick="showContent('queues')">Очередь</button>
+    </div>
+</div>
+<script>
+    function showContent(section) {
+        let content = '';
+        switch(section) {
+            case 'favorites':
+                // Отобразить избранные книги пользователя
+                content = '<h2>Избранные книги</h2>';
+                break;
+            /*case 'profile':
+                fetch('/getUserDetails')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Получаем информацию о пользователе
+                        const loggedInUser = data.user;
+                        // Маппинг русских названий полей
+                        const fieldNames = {
+                            'login': 'Логин',
+                            'email': 'Электронная почта',
+                            'fio': 'ФИО',
+                            'date': 'Дата рождения',
+                            'phoneNumber': 'Номер телефона',
+                            'numberDocument': 'Номер документа',
+                            'role': 'Роль',
+                            'description': 'Описание'
+                        };
+                        // Формируем HTML для таблицы
+                        content = '<h2>Профиль</h2>' +
+                            '<table>';
+                        // Перебираем свойства объекта пользователя и добавляем их в таблицу
+                        for (const key in loggedInUser) {
+                            // Пропускаем вывод ID пользователя и confirmPassword
+                            if (key === 'id' || key === 'confirmPassword' || key === 'password') continue;
+                            // Получаем русское название поля
+                            const russianFieldName = fieldNames[key] || key;
+                            // Обработка поля role
+                            if (key === 'role') {
+                                content += '<tr><td>' + russianFieldName + '</td><td>' + loggedInUser[key].name + '</td></tr>';
+                            } else {
+                                // Добавляем строку в таблицу с русским названием поля и его значением
+                                content += '<tr><td>' + russianFieldName + '</td><td>' + loggedInUser[key] + '</td></tr>';
+                            }
+                        }
+                        content += '</table>';
+                        // Обновляем содержимое элемента 'content' на странице
+                        document.getElementById('content').innerHTML = content;
+                    })
+                    .catch(error => console.error('Ошибка получения информации о пользователе:', error));
+                break;
 
-        </div>
-        
-
-
-    <script>
-        function showContent(section) {
-            let content = '';
-            switch(section) {
-                case 'profile':
-                    content = '<h2>Профиль</h2><p>Информация о пользователе...</p>';
-                    break;
-                case 'favorites':
-                    content = '<h2>Избранные</h2><p>Список избранных...</p>';
-                    break;
-                case 'orders':
-                    content = '<h2>Заказы</h2><p>Информация о заказах...</p>';
-                    break;
-                case 'orderHistory':
-                    content = '<h2>История заказов</h2><p>История ваших заказов...</p>';
-                    break;
-            }
-            document.getElementById('content').innerHTML = content;
+            case 'orders':
+                // Отобразить заказы пользователя
+                content = '<h2>Заказы</h2>' +
+                    '<table>' +
+                    '<tr><th>Название</th><th>Дата заказа</th><th>Дата возврата</th><th>Действие</th></tr>';
+                /!* Здесь в цикле добавляем строки с информацией о каждом заказе *!/
+                for (let i = 0; i < ${orders.length}; i++) {
+                    content += '<tr><td>' + ${orders[i].book.title} + '</td><td>' + ${orders[i].issueDate} + '</td><td>' + ${orders[i].returnDate} + '</td><td><button>Удалить заказ</button></td></tr>';
+                }
+                content += '</table>';
+                break;
+            case 'orderHistory':
+                // Отобразить историю заказов пользователя
+                content = '<h2>История заказов</h2>' +
+                    '<table>' +
+                    '<tr><th>Название</th><th>Дата заказа</th><th>Дата возврата</th></tr>';
+                /!* Здесь в цикле добавляем строки с информацией о каждом заказе из истории заказов *!/
+                for (let i = 0; i < ${orderHistory.length}; i++) {
+                    content += '<tr><td>' + ${orderHistory[i].book.title} + '</td><td>' + ${orderHistory[i].issueDate} + '</td><td>' + ${orderHistory[i].returnDate} + '</td></tr>';
+                }
+                content += '</table>';
+                break;
+            case 'queues':
+                // Отобразить очередь пользователя
+                content = '<h2>Очередь</h2>' +
+                    '<table>' +
+                    '<tr><th>Название</th><th>Номер в очереди</th><th>Действие</th></tr>';
+                /!* Здесь в цикле добавляем строки с информацией о каждой книге в очереди *!/
+                for (let i = 0; i < ${queue.length}; i++) {
+                    content += '<tr><td>' + ${queue[i].book.title} + '</td><td>' + ${queue[i].queueNumber} + '</td><td><button>Уйти из очереди</button></td></tr>';
+                }
+                content += '</table>';
+                break;*/
         }
+        document.getElementById('content').innerHTML = content;
+
+    }
     </script>
 </body>
 </html>

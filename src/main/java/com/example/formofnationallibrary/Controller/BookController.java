@@ -1,13 +1,18 @@
-package com.example.formofnationallibrary.Book;
+package com.example.formofnationallibrary.Controller;
 
 import com.example.formofnationallibrary.Entities.*;
+import com.example.formofnationallibrary.Repository.BookRepository;
+import com.example.formofnationallibrary.Repository.CopiesRepository;
+import com.example.formofnationallibrary.Repository.OrderRepository;
+import com.example.formofnationallibrary.Repository.QueueRepository;
+import com.example.formofnationallibrary.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +22,8 @@ import java.util.stream.Collectors;
 @SessionAttributes("loggedInUser")
 public class BookController {
 
-
+    @Autowired
+    private QueueService queueService;
     @Autowired
     private BookService bookService;
 
@@ -38,7 +44,11 @@ public class BookController {
     private BookRepository bookRepository;
     @Autowired
     private CopiesRepository copiesRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
+    @Autowired
+    private QueueRepository queueRepository;
     @GetMapping("/book/{id}")
     public ModelAndView getBook(@PathVariable Long id, Model model) {
         Optional<Book> bookOptional = bookRepository.findById(id);
@@ -205,6 +215,70 @@ public class BookController {
         } else {
             return new ModelAndView("error/404");
         }
+    }
+
+    @PostMapping("/orderBook")
+    public ModelAndView orderBook(@RequestParam Long copiesId, Model model) {
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        Optional<Copies> copiesOptional = copiesRepository.findById(copiesId);
+        if (copiesOptional.isPresent()) {
+            Copies copy = copiesOptional.get();
+            if ("Свободен".equals(copy.getStatusCopies().getStatus())) {
+                Order order = new Order();
+                order.setUserId(loggedInUser.getId());
+                order.setCopies(copy);
+                order.setIssueDate(LocalDate.now());
+                order.setReturnDate(LocalDate.now().plusDays(30));
+                orderRepository.save(order);
+
+                StatusCopies occupiedStatus = statusCopiesService.findByStatus("Занят");
+                copy.setStatusCopies(occupiedStatus);
+                copiesRepository.save(copy);
+
+                return new ModelAndView("redirect:/book/" + copy.getBook().getId());
+            } else {
+                List<Queue> queueList = queueService.findQueueByBookId(copy.getBook().getId());
+                int queueNumber = queueList.isEmpty() ? 1 : queueList.get(0).getQueueNumber() + 1;
+
+                Queue queue = new Queue();
+                queue.setUserId(loggedInUser.getId());
+                queue.setBook(copy.getBook());
+                queue.setQueueNumber(queueNumber);
+                queueService.save(queue);
+
+                return new ModelAndView("redirect:/book/" + copy.getBook().getId());
+            }
+        } else {
+            return new ModelAndView("error/404");
+        }
+    }
+
+    @PostMapping("/queueBook")
+    public ModelAndView queueBook(@RequestParam Long bookId, Model model) {
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return new ModelAndView("redirect:/login");
+        }
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        if (!bookOptional.isPresent()) {
+            return new ModelAndView("error/404");
+        }
+        Book book = bookOptional.get();
+        List<Queue> queueList = queueRepository.findByBookIdOrderByQueueNumberDesc(bookId);
+        int queueNumber = queueList.isEmpty() ? 1 : queueList.get(0).getQueueNumber() + 1;
+
+        Queue queue = new Queue();
+        queue.setUserId(loggedInUser.getId());
+        queue.setBook(book); // передача объекта Book
+        queue.setQueueNumber(queueNumber);
+        queue.setDateNotification(null); // или установить дату, если требуется
+        queueRepository.save(queue);
+
+        return new ModelAndView("redirect:/book/" + bookId);
     }
 }
 

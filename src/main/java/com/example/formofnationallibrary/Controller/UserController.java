@@ -1,8 +1,8 @@
-package com.example.formofnationallibrary.Authorization;
+package com.example.formofnationallibrary.Controller;
 
+import com.example.formofnationallibrary.Service.UserService;
 import com.example.formofnationallibrary.Entities.Role;
 import com.example.formofnationallibrary.Entities.User;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package com.example.formofnationallibrary.Authorization;
+package com.example.formofnationallibrary.Repository;
 
 import com.example.formofnationallibrary.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
