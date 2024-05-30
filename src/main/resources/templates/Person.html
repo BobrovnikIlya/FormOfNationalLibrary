@@ -59,10 +59,22 @@
         let content = '';
         switch(section) {
             case 'favorites':
-                // Отобразить избранные книги пользователя
-                content = '<h2>Избранные книги</h2>';
+                fetch('/getFavorites')
+                    .then(response => response.json())
+                    .then(data => {
+                        content = '<h2>Избранное</h2>' +
+                            '<table>' +
+                            '<tr><th>Название книги</th><th>Действие</th></tr>';
+                        data.favorites.forEach(favorite => {
+                            content += '<tr><td>' + favorite.bookName + '</td>' +
+                                '<td><button onclick="removeFromFavorites(' + favorite.id + ')">Убрать из избранного</button></td></tr>';
+                        });
+                        content += '</table>';
+                        document.getElementById('content').innerHTML = content;
+                    })
+                    .catch(error => console.error('Ошибка получения избранных книг:', error));
                 break;
-            /*case 'profile':
+            case 'profile':
                 fetch('/getUserDetails')
                     .then(response => response.json())
                     .then(data => {
@@ -103,42 +115,35 @@
                     .catch(error => console.error('Ошибка получения информации о пользователе:', error));
                 break;
 
-            case 'orders':
+            /*case 'orders':
                 // Отобразить заказы пользователя
-                content = '<h2>Заказы</h2>' +
-                    '<table>' +
-                    '<tr><th>Название</th><th>Дата заказа</th><th>Дата возврата</th><th>Действие</th></tr>';
-                /!* Здесь в цикле добавляем строки с информацией о каждом заказе *!/
-                for (let i = 0; i < ${orders.length}; i++) {
-                    content += '<tr><td>' + ${orders[i].book.title} + '</td><td>' + ${orders[i].issueDate} + '</td><td>' + ${orders[i].returnDate} + '</td><td><button>Удалить заказ</button></td></tr>';
-                }
-                content += '</table>';
+                content = '<h2>Заказы</h2>';
                 break;
             case 'orderHistory':
                 // Отобразить историю заказов пользователя
-                content = '<h2>История заказов</h2>' +
-                    '<table>' +
-                    '<tr><th>Название</th><th>Дата заказа</th><th>Дата возврата</th></tr>';
-                /!* Здесь в цикле добавляем строки с информацией о каждом заказе из истории заказов *!/
-                for (let i = 0; i < ${orderHistory.length}; i++) {
-                    content += '<tr><td>' + ${orderHistory[i].book.title} + '</td><td>' + ${orderHistory[i].issueDate} + '</td><td>' + ${orderHistory[i].returnDate} + '</td></tr>';
-                }
-                content += '</table>';
+                content = '<h2>История заказов</h2>';
                 break;
             case 'queues':
                 // Отобразить очередь пользователя
-                content = '<h2>Очередь</h2>' +
-                    '<table>' +
-                    '<tr><th>Название</th><th>Номер в очереди</th><th>Действие</th></tr>';
-                /!* Здесь в цикле добавляем строки с информацией о каждой книге в очереди *!/
-                for (let i = 0; i < ${queue.length}; i++) {
-                    content += '<tr><td>' + ${queue[i].book.title} + '</td><td>' + ${queue[i].queueNumber} + '</td><td><button>Уйти из очереди</button></td></tr>';
-                }
-                content += '</table>';
+                content = '<h2>Очередь</h2>';
                 break;*/
         }
-        document.getElementById('content').innerHTML = content;
-
+    }
+    function removeFromFavorites(favoriteId) {
+        fetch('/removeFromFavorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: favoriteId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showContent('favorites');
+                }
+            })
+            .catch(error => console.error('Ошибка удаления из избранного:', error));
     }
     </script>
 </body>

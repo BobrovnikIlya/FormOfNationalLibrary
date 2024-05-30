@@ -31,7 +31,9 @@ public class BookService {
             throw new IllegalArgumentException("Книга с идентификатором " + bookId + " не найдена.");
         }
     }
-
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
 
     @Transactional
     public void deleteBookById(Long bookId) {

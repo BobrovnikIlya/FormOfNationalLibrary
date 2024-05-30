@@ -12,8 +12,7 @@ import java.util.List;
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     boolean existsByBookIdAndUserId(Long bookId, Long userId);
-    @Query("SELECT f.bookId FROM Favorite f WHERE f.userId = :userId")
-    List<Book> findFavoritesByUserId(@Param("userId") Long userId);
+    List<Favorite> findByUserId(Long userId);
     // Можно добавить дополнительные методы, если необходимо
 }
 
