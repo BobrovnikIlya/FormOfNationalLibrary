@@ -17,6 +17,7 @@
     </div>
     <div class="header-menu">
         <ul>
+            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/person}">Пользователи</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
             <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
@@ -39,6 +40,20 @@
             <button type="submit">Найти</button>
         </div>
     </form>
+    <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
+        <form th:action="@{/deleteBook}" method="post">
+                <input type="hidden" name="bookId" th:value="${book.id}">
+                <button type="submit">Удалить</button>
+        </form>
+        <form th:action="@{/changeBook}" method="get">
+            <input type="hidden" name="bookId" th:value="${book.id}">
+            <button type="submit" class="edit-btn">Редактировать</button>
+        </form>
+        <form th:action="@{/addCopies}" method="get">
+            <input type="hidden" name="bookId" th:value="${book.id}">
+            <button type="submit" class="edit-btn">Добавить экземпляр</button>
+        </form>
+    </div>
     <h2>Описание</h2>
     <div class="table">
         <table>
@@ -84,7 +99,8 @@
                 <th>Шифр</th>
                 <th>Место нахождения</th>
                 <th>Статус</th>
-                <th>Заказать</th>
+                <th th:if="${loggedInUser != null}">Заказать</th>
+                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
             </tr>
             </thead>
             <tbody>
@@ -92,13 +108,22 @@
                 <td th:text="${copy.cipher}"></td>
                 <td th:text="${copy.location.place}"></td>
                 <td th:text="${copy.statusCopies.status}"></td>
-                <td><button>Заказать</button></td>
+                <td th:if="${loggedInUser != null}"><button>Заказать</button></td>
+                <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                    <form th:action="@{/deleteCopie}" method="post">
+                        <input type="hidden" name="copiesId" th:value="${copy.idCopies}">
+                        <button type="submit">Удалить</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="button-container">
-        <button class="button">В избранное</button>
+    <div class="button-container" th:if="${loggedInUser != null }">
+        <form th:action="@{/addFavorite}" method="post">
+            <input type="hidden" name="bookId" th:value="${book.id}">
+            <button class="button" type="submit">Добавить в избранное</button>
+        </form>
     </div>
 </div>
 </body>

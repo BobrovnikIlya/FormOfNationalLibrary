@@ -34,7 +34,7 @@ public class SearchController {
     private AuthorRepository authorRepository;
 
     @GetMapping("/search")
-    public ModelAndView searchBooks(@RequestParam String query, @RequestParam String field, Model model) {
+    public ModelAndView searchBooks(@RequestParam(defaultValue = " ") String query, @RequestParam(defaultValue = "") String field, Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
         if (loggedInUser != null) {
             model.addAttribute("loggedIn", true);
@@ -61,7 +61,7 @@ public class SearchController {
     @PostMapping("/deleteBook")
     public String deleteBook(@RequestParam Long bookId) {
         bookService.deleteBookById(bookId);
-        return "redirect:/home"; // Перенаправляем обратно на страницу поиска после удаления
+        return "redirect:/search";
     }
 
     @GetMapping("/changeBook")
@@ -78,20 +78,20 @@ public class SearchController {
             return mav;
         }
         else{
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/search");
         }
     }
     @PostMapping("/changeBook")
     public String changeBook(@ModelAttribute("book") Book updatedBook, @RequestParam Long bookId) {
         bookService.updateBook(updatedBook, bookId);
-        return "redirect:/home";
+        return "redirect:/book/" + bookId;
     }
     @PostMapping("/addFavorite")
     public String addFavorite(@RequestParam Long bookId, Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
         if (loggedInUser != null) {
             favoriteService.addFavorite(bookId, loggedInUser.getId());
-            return "redirect:/home";
+            return "redirect:/search";
         } else {
             return "redirect:/login"; // Перенаправляем на страницу входа, если пользователь не авторизован
         }

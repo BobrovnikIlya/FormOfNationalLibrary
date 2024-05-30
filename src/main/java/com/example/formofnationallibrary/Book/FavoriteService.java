@@ -11,10 +11,16 @@ public class FavoriteService {
     private FavoriteRepository favoriteRepository;
 
     public void addFavorite(Long bookId, Long userId) {
-        Favorite favorite = new Favorite();
-        favorite.setBookId(bookId);
-        favorite.setUserId(userId);
 
-        favoriteRepository.save(favorite);
+        if (!favoriteRepository.existsByBookIdAndUserId(bookId, userId)) {
+            // Если не существует, то добавляем новую запись
+            Favorite favorite = new Favorite();
+            favorite.setBookId(bookId);
+            favorite.setUserId(userId);
+
+            favoriteRepository.save(favorite);
+        } else {
+            return;
+        }
     }
 }

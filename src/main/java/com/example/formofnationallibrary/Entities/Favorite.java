@@ -7,7 +7,7 @@ public class Favorite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_favorite")
+    @Column(name = "id_favorit")
     private Long id;
 
     @Column(name = "id_book")

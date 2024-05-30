@@ -26,6 +26,11 @@ public class BookController {
 
     @Autowired
     private LanguageService languageService;
+    @Autowired
+    private StatusCopiesService statusCopiesService;
+
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private PublishService publishService;
@@ -86,7 +91,7 @@ public class BookController {
             return mav;
         } else {
             // Если пользователь не администратор или не авторизован, перенаправляем его куда-то еще
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/search");
         }
     }
     @PostMapping("/addBook")
@@ -104,7 +109,7 @@ public class BookController {
         mav.addObject("author", new Author());
         return mav;
         }else{
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/search");
         }
     }
     @PostMapping("/addAuthor")
@@ -122,7 +127,7 @@ public class BookController {
             mav.addObject("publish", new Publish());
             return mav;
         }else{
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/search");
         }
     }
     @PostMapping("/addPublish")
@@ -139,7 +144,7 @@ public class BookController {
             mav.addObject("language", new Language());
             return mav;
         }else{
-            return new ModelAndView("redirect:/home");
+            return new ModelAndView("redirect:/search");
         }
     }
     @PostMapping("/addLanguage")
@@ -148,6 +153,58 @@ public class BookController {
         return new ModelAndView("redirect:/addBook");
     }
 
+    @GetMapping("/addCopies")
+    public ModelAndView showAddCopiesForm(Model model, @RequestParam Long bookId) {
+        User loggedInUser = (User) model.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            model.addAttribute("loggedIn", true);
 
+            ModelAndView mav = new ModelAndView("AddCopies");
+            mav.addObject("copies", new Copies());
+            mav.addObject("bookId", bookId);
+
+            List<StatusCopies> sortedStatus = statusCopiesService.getAllStatusCopies();
+            mav.addObject("status", sortedStatus);
+
+            List<Location> sortedLocation = locationService.getAllLocation().stream()
+                    .sorted(Comparator.comparing(Location::getPlace))
+                    .collect(Collectors.toList());
+            mav.addObject("locations", sortedLocation);
+
+            return mav;
+        } else {
+            // Если пользователь не администратор или не авторизован, перенаправляем его куда-то еще
+            return new ModelAndView("redirect:/search");
+        }
+    }
+
+    @PostMapping("/addCopies")
+    public ModelAndView addCopies(@ModelAttribute Copies copies, @RequestParam Long bookId) {
+        // Установка книги для копии
+        Book book = bookRepository.findById(bookId).orElse(null);
+        if (book == null) {
+            // Обработка случая, если книга не найдена
+            return new ModelAndView("error/404");
+        }
+        copies.setBook(book);
+
+        // Сохранение копии в базу данных
+        copiesRepository.save(copies);
+
+        // Перенаправление на страницу книги с обновленным списком копий
+        return new ModelAndView("redirect:/book/" + bookId);
+    }
+
+    @PostMapping("/deleteCopie")
+    public ModelAndView deleteCopie(@RequestParam Long copiesId) {
+        Optional<Copies> copiesOptional = copiesRepository.findById(copiesId);
+        if (copiesOptional.isPresent()) {
+            Copies copy = copiesOptional.get();
+            copiesRepository.delete(copy);
+            return new ModelAndView("redirect:/book/" + copy.getBook().getId()); // Перенаправляем обратно на страницу книги
+        } else {
+            return new ModelAndView("error/404");
+        }
+    }
 }
 
