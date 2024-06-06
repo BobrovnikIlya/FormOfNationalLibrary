@@ -11,11 +11,18 @@ import java.util.List;
 public class LanguageService {
     @Autowired
     private LanguageRepository languageRepository;
-    public void saveLanguage(Language language) {
-        languageRepository.save(language);
+    public List<Language> findLanguagesByNameContaining(String term) {
+        return languageRepository.findByNameContaining(term);
     }
-
     public List<Language> getAllLanguages() {
         return languageRepository.findAll();
+    }
+
+    public Language findLanguageByName(String name) {
+        return languageRepository.findByName(name);
+    }
+
+    public void saveLanguage(Language language) {
+        languageRepository.save(language);
     }
 }

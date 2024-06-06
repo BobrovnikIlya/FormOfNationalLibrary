@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public class BookController {
 
     @Autowired
     private AuthorService authorService;
+    @Autowired
+    private CitiesService citiesService;
 
     @Autowired
     private LanguageService languageService;
@@ -83,21 +86,6 @@ public class BookController {
             ModelAndView mav = new ModelAndView("AddBook");
             mav.addObject("book", new Book());
 
-            List<Author> sortedAuthors = authorService.getAllAuthors().stream()
-                    .sorted(Comparator.comparing(Author::getName))
-                    .collect(Collectors.toList());
-            mav.addObject("authors", sortedAuthors);
-
-            List<Language> sortedLanguages = languageService.getAllLanguages().stream()
-                    .sorted(Comparator.comparing(Language::getName))
-                    .collect(Collectors.toList());
-            mav.addObject("languages", sortedLanguages);
-
-            List<Publish> sortedPublishes = publishService.getAllPublishes().stream()
-                    .sorted(Comparator.comparing(Publish::getName))
-                    .collect(Collectors.toList());
-            mav.addObject("publishes", sortedPublishes);
-
             return mav;
         } else {
             // Если пользователь не администратор или не авторизован, перенаправляем его куда-то еще
@@ -106,62 +94,50 @@ public class BookController {
     }
     @PostMapping("/addBook")
     public ModelAndView addBook(@ModelAttribute Book book) {
+        Author existingAuthor = authorService.findAuthorByName(book.getAuthor().getName());
+        if (existingAuthor == null) {
+            // Если автора нет в базе данных, добавляем его
+            existingAuthor = new Author();
+            existingAuthor.setName(book.getAuthor().getName());
+            authorService.saveAuthor(existingAuthor);
+        }
+
+        Language existingLanguage = languageService.findLanguageByName(book.getLanguage().getName());
+        if (existingLanguage == null) {
+            // Если языка нет в базе данных, добавляем его
+            existingLanguage = new Language();
+            existingLanguage.setName(book.getLanguage().getName());
+            languageService.saveLanguage(existingLanguage);
+        }
+
+        Publish existingPublish = publishService.findPublishByName(book.getPublish().getName());
+        if (existingPublish == null) {
+            // Если языка нет в базе данных, добавляем его
+            existingPublish = new Publish();
+            existingPublish.setName(book.getPublish().getName());
+            publishService.savePublish(existingPublish);
+        }
+
+        Cities existingCities = citiesService.findCitiesByName(book.getLanguage().getName());
+        if (existingCities == null) {
+            // Если языка нет в базе данных, добавляем его
+            existingCities = new Cities();
+            existingCities.setName(book.getCities().getName());
+            citiesService.saveCities(existingCities);
+        }
+
+
+        book.setAuthor(existingAuthor);
+        book.setLanguage(existingLanguage);
+        book.setCities(existingCities);
+        book.setPublish(existingPublish);
+
+
         bookService.saveBook(book);
+
         return new ModelAndView("redirect:/home");
     }
 
-    @GetMapping("/addAuthor")
-    public ModelAndView showAddAuthorForm(Model model) {
-        User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
-        model.addAttribute("loggedIn", true);
-        ModelAndView mav = new ModelAndView("AddAuthor");
-        mav.addObject("author", new Author());
-        return mav;
-        }else{
-            return new ModelAndView("redirect:/search");
-        }
-    }
-    @PostMapping("/addAuthor")
-    public ModelAndView addAuthor(@ModelAttribute Author author) {
-        authorService.saveAuthor(author);
-        return new ModelAndView("redirect:/addBook");
-    }
-
-    @GetMapping("/addPublish")
-    public ModelAndView showAddPublishForm(Model model) {
-        User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
-            model.addAttribute("loggedIn", true);
-            ModelAndView mav = new ModelAndView("AddPublish");
-            mav.addObject("publish", new Publish());
-            return mav;
-        }else{
-            return new ModelAndView("redirect:/search");
-        }
-    }
-    @PostMapping("/addPublish")
-    public ModelAndView addPublish(@ModelAttribute Publish publish) {
-        publishService.savePublish(publish);
-        return new ModelAndView("redirect:/addBook");
-    }
-    @GetMapping("/addLanguage")
-    public ModelAndView showAddLanguageForm(Model model) {
-        User loggedInUser = (User) model.getAttribute("loggedInUser");
-        if (loggedInUser != null && loggedInUser.getRole().getId() == 1) {
-            model.addAttribute("loggedIn", true);
-            ModelAndView mav = new ModelAndView("AddLanguage");
-            mav.addObject("language", new Language());
-            return mav;
-        }else{
-            return new ModelAndView("redirect:/search");
-        }
-    }
-    @PostMapping("/addLanguage")
-    public ModelAndView addLa(@ModelAttribute Language language) {
-        languageService.saveLanguage(language);
-        return new ModelAndView("redirect:/addBook");
-    }
 
     @GetMapping("/addCopies")
     public ModelAndView showAddCopiesForm(Model model, @RequestParam Long bookId) {
@@ -288,6 +264,54 @@ public class BookController {
         queueRepository.save(queue);
 
         return new ModelAndView("redirect:/book/" + bookId);
+    }
+
+    @GetMapping("/api/authors")
+    @ResponseBody
+    public List<String> getAuthors(@RequestParam("term") String term) {
+        List<Author> authors = authorService.findAuthorsByNameContaining(term);
+        List<String> authorNames = new ArrayList<>();
+        for (Author author : authors) {
+            authorNames.add(author.getName()); // Предполагается, что у объекта Author есть метод getName()
+        }
+        // Оставляем только первые 4 элемента
+        return authorNames.subList(0, Math.min(authorNames.size(), 4));
+    }
+
+    @GetMapping("/api/cities")
+    @ResponseBody
+    public List<String> getCities(@RequestParam("term") String term) {
+        List<Cities> cities = citiesService.findCitiesByNameContaining(term);
+        List<String> citiesNames = new ArrayList<>();
+        for (Cities city : cities) {
+            citiesNames.add(city.getName()); // Предполагается, что у объекта Author есть метод getName()
+        }
+        // Оставляем только первые 4 элемента
+        return citiesNames.subList(0, Math.min(citiesNames.size(), 4));
+    }
+
+    @GetMapping("/api/publishes")
+    @ResponseBody
+    public List<String> getPublishes(@RequestParam("term") String term) {
+        List<Publish> publishes = publishService.findPublishesByNameContaining(term);
+        List<String> publishNames = new ArrayList<>();
+        for (Publish publish : publishes) {
+            publishNames.add(publish.getName()); // Предполагается, что у объекта Author есть метод getName()
+        }
+        // Оставляем только первые 4 элемента
+        return publishNames.subList(0, Math.min(publishNames.size(), 4));
+    }
+
+    @GetMapping("/api/languages")
+    @ResponseBody
+    public List<String> getLanguages(@RequestParam("term") String term) {
+        List<Language> languages = languageService.findLanguagesByNameContaining(term);
+        List<String> languagesNames = new ArrayList<>();
+        for (Language language : languages) {
+            languagesNames.add(language.getName()); // Предполагается, что у объекта Author есть метод getName()
+        }
+        // Оставляем только первые 4 элемента
+        return languagesNames.subList(0, Math.min(languagesNames.size(), 4));
     }
 }
 

@@ -7,84 +7,89 @@
     <link rel="stylesheet" th:href="@{css/table.css}">
     <link rel="stylesheet" th:href="@{css/mainstyle.css}">
     <link rel="stylesheet" th:href="@{css/AuthorizationStyle.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 <header>
-    <div class="header-content">
-        <a th:href="@{/home}">
-            <div class="logo"></div>
-            <h1>ЭЛЕКТРОННЫЙ КАТАЛОГ <p>НАЦИОНАЛЬНОЙ БИБЛИОТЕКИ БЕЛАРУСИ</p></h1>
-        </a>
-    </div>
-    <div class="header-menu">
-        <ul>
-            <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/accounts}">Пользователи</a></li>
-            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Формуляр читателя</a></li>
-            <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
-            <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
-        </ul>
-    </div>
+    <!-- ... ваш существующий код ... -->
 </header>
-    <div class="form2">
-        <div class="form-panel one">
-            <div class="form-header">
-                <h1>Добавление книги</h1>
-            </div>
-            <div class="form-content">
-                <form action="/addBook" method="post" th:object="${book}">
-                    <div class="form-columns">
-                        <div class="form-group">
-                            <label for="name">Название книги</label>
-                            <input type="text" id="name" th:field="*{name}" required="required"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="author">Автор</label>
-                            <select id="author" th:field="*{author.id}" required="required">
-                                <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="year">Год</label>
-                            <input type="number" id="year" th:field="*{year}" required="required"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="pages">Количество страниц</label>
-                            <input type="number" id="pages" th:field="*{pages}" required="required"/>
-                        </div>
-                       <div class="form-group">
-                            <label for="language">Язык</label>
-                            <select id="language" th:field="*{language.id}" required="required">
-                                <option th:each="language : ${languages}" th:value="${language.id}" th:text="${language.name}"></option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="publish">Издательство</label>
-                            <select id="publish" th:field="*{publish.id}" required="required">
-                                <option th:each="publish : ${publishes}" th:value="${publish.id}" th:text="${publish.name}"></option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Описание</label>
-                            <input type="text" id="description" th:field="*{description}" required="required"></textarea>
-                        </div>
+<div class="form2">
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1>Добавление книги</h1>
+        </div>
+        <div class="form-content">
+            <form action="/addBook" method="post" th:object="${book}">
+                <div class="form-columns">
+                    <div class="form-group">
+                        <label for="name">Название книги</label>
+                        <input type="text" id="name" th:field="*{name}" required="required"/>
                     </div>
-                    <div class="form-group full-width">
-                        <button type="submit">Добавить книгу</button>
+                    <div class="form-group">
+                        <label for="author">Автор</label>
+                        <input type="text" id="author" th:field="*{author.name}" required="required"/>
                     </div>
-                </form>
-                <div class="form-group">
-                    <div class="message">
-                        <a href="/addAuthor">Добавить автора</a>
+                    <div class="form-group">
+                        <label for="year">Год</label>
+                        <input type="number" id="year" th:field="*{year}" required="required"/>
                     </div>
-                    <div class="message">
-                        <a href="/addPublish">Добавить издательство</a>
+                    <div class="form-group">
+                        <label for="pages">Количество страниц</label>
+                        <input type="number" id="pages" th:field="*{pages}" required="required"/>
                     </div>
-                    <div class="message">
-                        <a href="/addLanguage">Добавить язык</a>
+                    <div class="form-group">
+                        <label for="city">Город</label>
+                        <input type="text" id="city" th:field="*{cities.name}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="publish">Издательство</label>
+                        <input type="text" id="publish" th:field="*{publish.name}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Категория</label>
+                        <input type="text" id="category" th:field="*{category}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Язык</label>
+                        <input type="text" id="language" th:field="*{language.name}" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Аннотации</label>
+                        <input type="text" id="description" th:field="*{description}" required="required"/>
                     </div>
                 </div>
-            </div>
+                <div class="form-group full-width">
+                    <button type="submit">Добавить книгу</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+<script>
+    $(function() {
+        function setupAutocomplete(id, url) {
+            $("#" + id).autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function(data) {
+                            response(data.slice(0, 4)); // Оставляем только первые 4 элемента
+                        }
+                    });
+                },
+                minLength: 2
+            });
+        }
+
+        setupAutocomplete("author", "/api/authors");
+        setupAutocomplete("city", "/api/cities");
+        setupAutocomplete("publish", "/api/publishes");
+        setupAutocomplete("language", "/api/languages");
+    });
+</script>
 </body>
 </html>

@@ -62,12 +62,24 @@
                 <th>Значение</th>
             </tr>
             <tr>
+                <td>Автор</td>
+                <td th:text="${book.author.name}"></td>
+            </tr>
+            <tr>
                 <td>Название</td>
                 <td th:text="${book.name}"></td>
             </tr>
             <tr>
-                <td>Автор</td>
-                <td th:text="${book.author.name}"></td>
+                <td>Категория</td>
+                <td th:text="${book.category}"></td>
+            </tr>
+            <tr>
+                <td>Город</td>
+                <td th:text="${book.cities.name}"></td>
+            </tr>
+            <tr>
+                <td>Издательство</td>
+                <td th:text="${book.publish.name}"></td>
             </tr>
             <tr>
                 <td>Год</td>
@@ -78,15 +90,11 @@
                 <td th:text="${book.pages}"></td>
             </tr>
             <tr>
-                <td>Издательство</td>
-                <td th:text="${book.publish.name}"></td>
-            </tr>
-            <tr>
                 <td>Язык</td>
                 <td th:text="${book.language.name}"></td>
             </tr>
             <tr>
-                <td>Описание</td>
+                <td>Аннотации</td>
                 <td th:text="${book.description}"></td>
             </tr>
         </table>

@@ -11,11 +11,18 @@ import java.util.List;
 public class AuthorService {
     @Autowired
     private AuthorRepository authorRepository;
-    public void saveAuthor(Author author) {
-        authorRepository.save(author);
-    }
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
+    }
+    public List<Author> findAuthorsByNameContaining(String name) {
+        return authorRepository.findByNameContaining(name);
+    }
+    public Author findAuthorByName(String name) {
+        return authorRepository.findByName(name);
+    }
+
+    public void saveAuthor(Author author) {
+        authorRepository.save(author);
     }
 }

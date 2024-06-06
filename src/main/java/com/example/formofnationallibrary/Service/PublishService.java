@@ -12,11 +12,18 @@ public class PublishService {
     @Autowired
     private PublishRepository publishRepository;
 
-    public void savePublish(Publish publish) {
-        publishRepository.save(publish);
-    }
-
     public List<Publish> getAllPublishes() {
         return publishRepository.findAll();
+    }
+    public List<Publish> findPublishesByNameContaining(String term) {
+        return publishRepository.findByNameContaining(term);
+    }
+
+    public Publish findPublishByName(String name) {
+        return publishRepository.findByName(name);
+    }
+
+    public void savePublish(Publish publisher) {
+        publishRepository.save(publisher);
     }
 }
