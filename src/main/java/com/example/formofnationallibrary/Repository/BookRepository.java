@@ -13,11 +13,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.author.name LIKE %:query%")
     List<Book> findByAuthorName(@Param("query") String query);
-
+    @Query("SELECT b FROM Book b WHERE b.category LIKE %:query%")
+    List<Book> findByCategoryName(@Param("query") String query);
     @Query("SELECT b FROM Book b WHERE b.name LIKE %:query%")
     List<Book> findByTitle(@Param("query") String query);
 
-    @Query("SELECT b FROM Book b WHERE b.name LIKE %:query% OR b.author.name LIKE %:query% OR b.description LIKE %:query% ORDER BY b.name")
+    @Query("SELECT b FROM Book b WHERE b.name LIKE %:query% OR b.author.name LIKE %:query% OR b.cities.name LIKE %:query% OR b.category LIKE %:query% OR b.description LIKE %:query% ORDER BY b.name")
     List<Book> findAllByQuery(@Param("query") String query);
 }
 

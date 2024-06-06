@@ -27,15 +27,16 @@
 <div class="container">
     <div class="button-container">
         <div class="search-container">
-            <form th:action="@{/search}" method="get">
+            <form th:action="@{/search}" method="get" onsubmit="return validateSearch()">
                 <div class="search-bar">
-                    <input type="text" name="query" placeholder="Введите текст для поиска">
+                    <input type="text" id="query" name="query" placeholder="Введите текст для поиска книги">
                 </div>
                 <div class="dropdown">
                     <select name="field">
                         <option value="all">Все поля</option>
                         <option value="author">Автор</option>
                         <option value="title">Название</option>
+                        <option value="category">Категория</option>
                     </select>
                 </div>
                 <div class="button">
@@ -60,7 +61,7 @@
             <tr>
                 <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
                 <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Редактировать</th>
-                <th>Описание</th>
+                <th>Библиографическое название</th>
                 <th>Добавить в избранное</th>
             </tr>
             </thead>
@@ -80,7 +81,7 @@
                 </td>
                 <td>
                     <a th:href="@{'/book/' + ${book.id}}"
-                       th:text="${book.name} + ', ' + ${book.author.name} + ', ' + ${book.year} + ', ' + ${book.pages} + ', ' + ${book.publish.name} + ', ' + ${book.language.name}"></a>
+                    th:text="${book.author.name} + '. ' + ${book.name} + ': ' + ${book.category} + '. ' + ${book.cities.name} + ': ' + ${book.publish.name} + ', ' + ${book.year} + '. ' + ${book.pages} + ' с.'"></a>
                 </td>
                 <td >
                     <form th:if="${loggedInUser != null}" th:action="@{/addFavorite}" method="post">
@@ -94,5 +95,15 @@
         </table>
     </div>
 </div>
+<script>
+    function validateSearch() {
+        const query = document.getElementById('query').value.trim();
+        if (query === "") {
+            alert("Пожалуйста, введите текст для поиска.");
+            return false;
+        }
+        return true;
+    }
+</script>
 </body>
 </html>

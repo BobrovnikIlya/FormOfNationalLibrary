@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -34,12 +35,19 @@ public class SearchController {
     private AuthorRepository authorRepository;
 
     @GetMapping("/search")
-    public ModelAndView searchBooks(@RequestParam(defaultValue = " ") String query, @RequestParam(defaultValue = "") String field, Model model) {
+    public ModelAndView searchBooks(@RequestParam(defaultValue = "") String query, @RequestParam(defaultValue = "") String field, Model model) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
         if (loggedInUser != null) {
             model.addAttribute("loggedIn", true);
         } else {
             model.addAttribute("loggedIn", false);
+        }
+
+        if (query.trim().isEmpty()) {
+            ModelAndView mav = new ModelAndView("Catalog");
+            mav.addObject("error", "Пожалуйста, введите текст для поиска.");
+            mav.addObject("books", Collections.emptyList());
+            return mav;
         }
 
         List<Book> books;
@@ -49,6 +57,9 @@ public class SearchController {
                 break;
             case "title":
                 books = bookRepository.findByTitle(query);
+                break;
+            case "category":
+                books = bookRepository.findByCategoryName(query);
                 break;
             default:
                 books = bookRepository.findAllByQuery(query);

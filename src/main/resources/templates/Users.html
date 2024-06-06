@@ -27,15 +27,16 @@
 <div class="container">
     <div class="button-container">
         <div class="search-container">
-            <form th:action="@{/search}" method="get">
+            <form th:action="@{/search}" method="get" onsubmit="return validateSearch()">
                 <div class="search-bar">
-                    <input type="text" name="query" placeholder="Введите текст для поиска">
+                    <input type="text" id="query" name="query" placeholder="Введите текст для поиска книги">
                 </div>
                 <div class="dropdown">
                     <select name="field">
                         <option value="all">Все поля</option>
                         <option value="author">Автор</option>
                         <option value="title">Название</option>
+                        <option value="category">Категория</option>
                     </select>
                 </div>
                 <div class="button">
@@ -80,5 +81,15 @@
         </table>
     </div>
 </div>
+<script>
+    function validateSearch() {
+        const query = document.getElementById('query').value.trim();
+        if (query === "") {
+            alert("Пожалуйста, введите текст для поиска.");
+            return false;
+        }
+        return true;
+    }
+</script>
 </body>
 </html>
