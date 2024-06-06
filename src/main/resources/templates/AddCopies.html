@@ -19,7 +19,7 @@
     <div class="header-menu">
         <ul>
             <li th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}"><a th:href="@{/accounts}">Пользователи</a></li>
-            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Личный кабинет</a></li>
+            <li th:if="${loggedInUser != null}"><a th:href="@{/person}">Формуляр читателя</a></li>
             <li th:if="${loggedInUser != null}"><a th:href="@{/logout}">Выход</a></li>
             <li th:if="${loggedInUser == null}"><a th:href="@{/login}">Вход</a></li>
         </ul>
@@ -28,7 +28,7 @@
     <div class="form2">
         <div class="form-panel one">
             <div class="form-header">
-                <h1>Добавление книги</h1>
+                <h1>Добавление экземпляра</h1>
             </div>
             <div class="form-content">
                 <form action="/addCopies" method="post" th:object="${copies}">

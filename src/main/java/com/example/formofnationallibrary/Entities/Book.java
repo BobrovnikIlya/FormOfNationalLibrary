@@ -27,14 +27,23 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "id_publish", nullable = false)
     private Publish publish;
-
+    @ManyToOne
+    @JoinColumn(name = "id_city", nullable = false)
+    private Cities cities;
     @Column(name = "description")
     private String description;
-
+    @Column(name = "category")
+    private String category;
     @ManyToOne
     @JoinColumn(name = "id_language", nullable = false)
     private Language language;
+    public Cities getCities() {
+        return cities;
+    }
 
+    public void setCities(Cities cities) {
+        this.cities = cities;
+    }
     public Long getId() {
         return id;
     }
@@ -99,5 +108,12 @@ public class Book {
         this.language = language;
     }
 
-    // Getters and Setters
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+// Getters and Setters
 }

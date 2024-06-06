@@ -289,6 +289,5 @@ public class BookController {
 
         return new ModelAndView("redirect:/book/" + bookId);
     }
-
 }
 

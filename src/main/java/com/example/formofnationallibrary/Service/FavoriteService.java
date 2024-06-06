@@ -35,6 +35,10 @@ public class FavoriteService {
             return;
         }
     }
+    public void deleteFavoritesByBookId(Long bookId) {
+        List<Favorite> favoritesToDelete = favoriteRepository.findByBookId(bookId);
+        favoriteRepository.deleteAll(favoritesToDelete);
+    }
     public List<Favorite> findByUserId(Long userId) {
         return favoriteRepository.findByUserId(userId);
     }

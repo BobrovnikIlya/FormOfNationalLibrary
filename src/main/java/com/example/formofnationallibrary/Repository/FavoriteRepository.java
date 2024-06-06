@@ -13,6 +13,7 @@ import java.util.List;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     boolean existsByBookIdAndUserId(Long bookId, Long userId);
     void deleteByUserId(Long userId);
+    List<Favorite> findByBookId(Long bookId);
     List<Favorite> findByUserId(Long userId);
     // Можно добавить дополнительные методы, если необходимо
 }

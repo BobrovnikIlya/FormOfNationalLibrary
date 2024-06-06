@@ -1,15 +1,18 @@
 package com.example.formofnationallibrary.Service;
 
 import com.example.formofnationallibrary.Entities.Book;
-import com.example.formofnationallibrary.Repository.BookRepository;
+import com.example.formofnationallibrary.Entities.Copies;
+import com.example.formofnationallibrary.Repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
-
-    private final BookRepository bookRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     public BookService(BookRepository bookRepository) {
@@ -31,16 +34,13 @@ public class BookService {
             throw new IllegalArgumentException("Книга с идентификатором " + bookId + " не найдена.");
         }
     }
-    public Book findById(Long id) {
-        return bookRepository.findById(id).orElse(null);
-    }
-
-    @Transactional
     public void deleteBookById(Long bookId) {
         bookRepository.deleteById(bookId);
     }
-
-    public void saveBook(Book book) {
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+        public void saveBook(Book book) {
         bookRepository.save(book);
     }
 }
