@@ -3,6 +3,7 @@ package com.example.formofnationallibrary.Controller;
 import com.example.formofnationallibrary.Entities.*;
 import com.example.formofnationallibrary.Repository.*;
 import com.example.formofnationallibrary.Service.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,8 @@ public class BookController {
     private CopiesRepository copiesRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
     @Autowired
     private StatusCopiesRepository statusCopiesRepository;
 
@@ -136,8 +139,6 @@ public class BookController {
 
         return new ModelAndView("redirect:/home");
     }
-
-
     @GetMapping("/addCopies")
     public ModelAndView showAddCopiesForm(Model model, @RequestParam Long bookId) {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
@@ -183,10 +184,17 @@ public class BookController {
     }
 
     @PostMapping("/deleteCopie")
+    @Transactional
     public ModelAndView deleteCopie(@RequestParam Long copiesId) {
         Optional<Copies> copiesOptional = copiesRepository.findById(copiesId);
         if (copiesOptional.isPresent()) {
             Copies copy = copiesOptional.get();
+
+            // Удаляем связанные записи из orders и order_history
+            orderRepository.deleteAllByCopies(copy);
+            orderHistoryRepository.deleteAllByCopies(copy);
+
+            // Удаляем экземпляр книги
             copiesRepository.delete(copy);
             return new ModelAndView("redirect:/book/" + copy.getBook().getId()); // Перенаправляем обратно на страницу книги
         } else {

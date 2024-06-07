@@ -18,6 +18,6 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long
     @Modifying
     @Query("DELETE FROM OrderHistory oh WHERE oh.copies.idCopies IN :copiesIds")
     void deleteByCopiesIds(@Param("copiesIds") List<Long> copiesIds);
-    void deleteByCopies(Copies copies);}
+    void deleteAllByCopies(Copies copies);}
 
 
