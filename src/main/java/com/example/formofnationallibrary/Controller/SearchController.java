@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,10 +77,22 @@ public class SearchController {
         mav.addObject("books", books);
         return mav;
     }
-    @PostMapping("/deleteBook")
-    public String deleteBook(@RequestParam Long bookId) {
-        bookService.deleteBookById(bookId);
-        return "redirect:/search";
+    @PostMapping("/deleteBooks")
+    public String deleteBooks(@RequestParam(name = "selectedBooks", required = false) List<Long> selectedBooks,@RequestParam Long bookId, Model model) {
+        if (selectedBooks == null || selectedBooks.isEmpty()) {
+            if(bookId != null){
+                selectedBooks = new ArrayList<>();
+                selectedBooks.add(0, bookId);
+                bookService.deleteBooksWithDependencies(selectedBooks);
+                return "redirect:/home";
+            }else {
+                model.addAttribute("books", bookRepository.findAll()); // Обновите это, чтобы снова загрузить книги
+                return "Catalog";  // Название вашей страницы каталога
+            }
+        } else {
+            bookService.deleteBooksWithDependencies(selectedBooks);
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/changeBook")
@@ -143,7 +156,7 @@ public class SearchController {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
         if (loggedInUser != null) {
             favoriteService.addFavorite(bookId, loggedInUser.getId());
-            return "redirect:/search";
+            return "redirect:/home";
         } else {
             return "redirect:/login"; // Перенаправляем на страницу входа, если пользователь не авторизован
         }

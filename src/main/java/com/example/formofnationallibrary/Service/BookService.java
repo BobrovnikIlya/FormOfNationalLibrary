@@ -18,7 +18,31 @@ public class BookService {
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
+    @Autowired
+    private QueueRepository queueRepository;
+    @Autowired
+    private CopiesRepository copiesRepository;
 
+    @Transactional
+    public void deleteBooksWithDependencies(List<Long> bookIds) {
+        for (Long bookId : bookIds) {
+            favoriteRepository.deleteByBookId(bookId);
+            queueRepository.deleteByBookId(bookId);
+
+            List<Long> copiesIds = copiesRepository.findIdsByBookId(bookId);
+            orderRepository.deleteByCopiesIds(copiesIds);
+            orderHistoryRepository.deleteByCopiesIds(copiesIds);
+            copiesRepository.deleteByBookId(bookId);
+
+            bookRepository.deleteById(bookId);
+        }
+    }
     public void updateBook(Book updatedBook, Long bookId) {
         Book existingBook = bookRepository.findById(bookId).orElse(null);
         if (existingBook != null) {

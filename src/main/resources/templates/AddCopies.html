@@ -42,32 +42,13 @@
                                 <option th:each="location : ${locations}" th:value="${location.idLocation}" th:text="${location.place}"></option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="publish">Место нахождения</label>
-                            <select id="publish" th:field="*{statusCopies.idStatusCopies}" required="required">
-                                <option th:each="status : ${status}" th:value="${status.idStatusCopies}" th:text="${status.status}"></option>
-                            </select>
-                        </div>
                     <div class="form-group full-width">
-
                         <form action="/addCopies" method="post" th:object="${copies}">
                             <input type="hidden" name="bookId" th:value="${bookId}" />
                             <button type="submit">Добавить экземпляр</button>
                         </form>
-
                     </div>
                 </form>
-                <div class="form-group">
-                    <div class="message">
-                        <a href="/addAuthor">Добавить автора</a>
-                    </div>
-                    <div class="message">
-                        <a href="/addPublish">Добавить издательство</a>
-                    </div>
-                    <div class="message">
-                        <a href="/addLanguage">Добавить язык</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

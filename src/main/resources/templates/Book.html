@@ -136,7 +136,7 @@
     <div class="button-container">
         <div class="button-group">
             <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
-                <form th:action="@{/deleteBook}" method="post">
+                <form th:action="@{/deleteBooks}" method="post">
                     <input type="hidden" name="bookId" th:value="${book.id}">
                     <button type="submit">Удалить</button>
                 </form>

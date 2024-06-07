@@ -55,45 +55,44 @@
     <div class="status-bar">
         <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
     </div>
-    <div class="table">
-        <table>
-            <thead>
-            <tr>
-                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
-                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Редактировать</th>
-                <th>Библиографическое название</th>
-                <th>Добавить в избранное</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="book : ${books}">
-                <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
-                    <form th:action="@{/deleteBook}" method="post">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
-                        <button type="submit" class="delete-btn">Удалить</button>
-                    </form>
-                </td>
-                <td th:if="${loggedInUser != null && loggedInUser.role.name == 'Admin'}">
-                    <form th:action="@{/changeBook}" method="get">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
-                        <button type="submit" class="edit-btn">Редактировать</button>
-                    </form>
-                </td>
-                <td>
-                    <a th:href="@{'/book/' + ${book.id}}"
-                    th:text="${book.author.name} + '. ' + ${book.name} + ': ' + ${book.category} + '. ' + ${book.cities.name} + ': ' + ${book.publish.name} + ', ' + ${book.year} + '. ' + ${book.pages} + ' с.'"></a>
-                </td>
-                <td >
-                    <form th:if="${loggedInUser != null}" th:action="@{/addFavorite}" method="post">
-                        <input type="hidden" name="bookId" th:value="${book.id}">
-                        <button type="submit">Добавить</button>
-                    </form>
-                    <p th:if="${loggedInUser == null}">Необходимо авторизоваться</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <form th:action="@{/deleteBooks}" method="post" onsubmit="return submitDeleteForm()">
+        <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+            <button type="submit" class="delete-btn">Удалить выбранные</button>
+        </div>
+    </form>
+    <form id="booksForm">
+        <div class="table">
+            <table>
+                <thead>
+                <tr>
+                    <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                        <input type="checkbox" id="selectAllCheckbox" onclick="toggleAllCheckboxes(this)"/>
+                    </th>
+                    <th>Библиографическое название</th>
+                    <th>Добавить в избранное</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                        <input type="checkbox" name="selectedBooks" th:value="${book.id}"/>
+                    </td>
+                    <td>
+                        <a th:href="@{'/book/' + ${book.id}}"
+                           th:text="${book.author.name} + '. ' + ${book.name} + ': ' + ${book.category} + '. ' + ${book.cities.name} + ': ' + ${book.publish.name} + ', ' + ${book.year} + '. ' + ${book.pages} + ' с.'"></a>
+                    </td>
+                    <td>
+                        <form th:if="${loggedInUser != null}" th:action="@{/addFavorite}" method="post">
+                            <input type="hidden" name="bookId" th:value="${book.id}">
+                            <button type="submit">Добавить</button>
+                        </form>
+                        <p th:if="${loggedInUser == null}">Необходимо авторизоваться</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>
 <script>
     function validateSearch() {
@@ -103,6 +102,42 @@
             return false;
         }
         return true;
+    }
+
+    function toggleAllCheckboxes(source) {
+        const checkboxes = document.getElementsByName('selectedBooks');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function submitDeleteForm() {
+        const checkboxes = document.getElementsByName('selectedBooks');
+        const selectedBooks = [];
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedBooks.push(checkboxes[i].value);
+            }
+        }
+        if (selectedBooks.length === 0) {
+            alert("Выберите хотя бы одну книгу для удаления.");
+            return false;
+        }
+
+        // Создаем скрытые поля для каждой выбранной книги
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/deleteBooks';
+        for (let i = 0; i < selectedBooks.length; i++) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedBooks';
+            input.value = selectedBooks[i];
+            form.appendChild(input);
+        }
+        document.body.appendChild(form);
+        form.submit();
+        return false;
     }
 </script>
 </body>

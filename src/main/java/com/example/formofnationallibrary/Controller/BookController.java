@@ -1,10 +1,7 @@
 package com.example.formofnationallibrary.Controller;
 
 import com.example.formofnationallibrary.Entities.*;
-import com.example.formofnationallibrary.Repository.BookRepository;
-import com.example.formofnationallibrary.Repository.CopiesRepository;
-import com.example.formofnationallibrary.Repository.OrderRepository;
-import com.example.formofnationallibrary.Repository.QueueRepository;
+import com.example.formofnationallibrary.Repository.*;
 import com.example.formofnationallibrary.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +46,8 @@ public class BookController {
     private CopiesRepository copiesRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private StatusCopiesRepository statusCopiesRepository;
 
     @Autowired
     private QueueRepository queueRepository;
@@ -118,7 +117,7 @@ public class BookController {
             publishService.savePublish(existingPublish);
         }
 
-        Cities existingCities = citiesService.findCitiesByName(book.getLanguage().getName());
+        Cities existingCities = citiesService.findCitiesByName(book.getCities().getName());
         if (existingCities == null) {
             // Если языка нет в базе данных, добавляем его
             existingCities = new Cities();
@@ -174,7 +173,9 @@ public class BookController {
         }
         copies.setBook(book);
 
-        // Сохранение копии в базу данных
+        StatusCopies freeStatusOpt = statusCopiesRepository.findByStatus("Свободен");
+        copies.setStatusCopies(freeStatusOpt);
+
         copiesRepository.save(copies);
 
         // Перенаправление на страницу книги с обновленным списком копий
