@@ -122,7 +122,7 @@ public class SearchController {
             publishService.savePublish(existingPublish);
         }
 
-        Cities existingCities = citiesService.findCitiesByName(updatedBook.getLanguage().getName());
+        Cities existingCities = citiesService.findCitiesByName(updatedBook.getCities().getName());
         if (existingCities == null) {
             // Если языка нет в базе данных, добавляем его
             existingCities = new Cities();
