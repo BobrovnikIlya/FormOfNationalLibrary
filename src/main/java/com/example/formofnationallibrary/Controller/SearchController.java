@@ -156,7 +156,7 @@ public class SearchController {
         User loggedInUser = (User) model.getAttribute("loggedInUser");
         if (loggedInUser != null) {
             favoriteService.addFavorite(bookId, loggedInUser.getId());
-            return "redirect:/home";
+            return "redirect:/book/" + bookId;
         } else {
             return "redirect:/login"; // Перенаправляем на страницу входа, если пользователь не авторизован
         }

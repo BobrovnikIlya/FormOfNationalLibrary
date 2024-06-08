@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +30,16 @@ public class FavoriteService {
             Favorite favorite = new Favorite();
             favorite.setBookId(bookId);
             favorite.setUserId(userId);
-
             favoriteRepository.save(favorite);
+
+            Optional<Book> optionalBook = bookRepository.findById(bookId);
+            if (optionalBook.isPresent()) {
+                Book book = optionalBook.get();
+                // Увеличиваем поле number_favorite на 1
+                book.setNumber_favorite(book.getNumber_favorite() + 1);
+                // Сохраняем изменения в базе данных
+                bookRepository.save(book);
+            }
         } else {
             return;
         }

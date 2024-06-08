@@ -23,7 +23,12 @@ public class Book {
 
     @Column(name = "pages")
     private int pages;
-
+    @Column(name = "views")
+    private int views;
+    @Column(name = "number_orders")
+    private int number_orders;
+    @Column(name = "number_favorite")
+    private int number_favorite;
     @ManyToOne
     @JoinColumn(name = "id_publish", nullable = false)
     private Publish publish;
@@ -37,6 +42,31 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "id_language", nullable = false)
     private Language language;
+
+    public int getNumber_orders() {
+        return number_orders;
+    }
+
+    public void setNumber_orders(int number_orders) {
+        this.number_orders = number_orders;
+    }
+
+    public int getNumber_favorite() {
+        return number_favorite;
+    }
+
+    public void setNumber_favorite(int number_favorite) {
+        this.number_favorite = number_favorite;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
     public Cities getCities() {
         return cities;
     }
@@ -115,5 +145,5 @@ public class Book {
     public void setCategory(String category) {
         this.category = category;
     }
-// Getters and Setters
+
 }

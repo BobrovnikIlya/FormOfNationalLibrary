@@ -6,6 +6,8 @@
     <title>Национальная библиотека Беларуси</title>
     <link rel="stylesheet" th:href="@{/css/mainstyle.css}">
     <link rel="stylesheet" th:href="@{/css/table.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 <header>
@@ -133,6 +135,10 @@
             </tbody>
         </table>
     </div>
+    <h2>Статистика</h2>
+    <div class="chart-container" style="width: 50%; margin: auto;">
+        <canvas id="bookStatsChart"></canvas>
+    </div>
     <div class="button-container">
         <div class="button-group">
             <div th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" class="button">
@@ -165,6 +171,64 @@
         }
         return true;
     }
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('bookStatsChart').getContext('2d');
+        const views = [[${book.views}]];
+        const orders = [[${book.number_orders}]];
+        const favorites = [[${book.number_favorite}]];
+
+        const bookStatsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Просмотры: ' + views, 'Заказы: '+orders, 'Добаавленно в избранное: '+favorites],
+                datasets: [{
+                    label: 'Статистика книги',
+                    data: [views, orders, favorites],
+                    backgroundColor: [
+                        'rgba(1,151,117,0.3)',
+                        'rgba(151,0,248,0.3)',
+                        'rgba(78,74,184,0.3)'
+                    ],
+                    borderColor: [
+                        'rgb(255,255,255)',
+                        'rgb(255,255,255)',
+                        'rgb(255,255,255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 20
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'left',
+                        labels: {
+                            boxWidth: 20,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>

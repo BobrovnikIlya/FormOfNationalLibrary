@@ -65,8 +65,11 @@ public class BookController {
                 model.addAttribute("loggedIn", false);
             }
 
-            ModelAndView mav = new ModelAndView("book");
             Book book = bookOptional.get();
+            book.setViews(book.getViews() + 1);
+            bookRepository.save(book);
+
+            ModelAndView mav = new ModelAndView("book");
             mav.addObject("book", book);
 
             // Получение всех копий для данной книги
@@ -133,6 +136,9 @@ public class BookController {
         book.setLanguage(existingLanguage);
         book.setCities(existingCities);
         book.setPublish(existingPublish);
+        book.setViews(0);
+        book.setNumber_orders(0);
+        book.setNumber_favorite(0);
 
 
         bookService.saveBook(book);
@@ -212,6 +218,7 @@ public class BookController {
         Optional<Copies> copiesOptional = copiesRepository.findById(copiesId);
         if (copiesOptional.isPresent()) {
             Copies copy = copiesOptional.get();
+            Book book = copy.getBook();
             if ("Свободен".equals(copy.getStatusCopies().getStatus())) {
                 Order order = new Order();
                 order.setUserId(loggedInUser.getId());
@@ -224,6 +231,8 @@ public class BookController {
                 copy.setStatusCopies(occupiedStatus);
                 copiesRepository.save(copy);
 
+                book.setNumber_orders(book.getNumber_orders() + 1);
+                bookRepository.save(book);
                 return new ModelAndView("redirect:/book/" + copy.getBook().getId());
             } else {
                 List<Queue> queueList = queueService.findQueueByBookId(copy.getBook().getId());
