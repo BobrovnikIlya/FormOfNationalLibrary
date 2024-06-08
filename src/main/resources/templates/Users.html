@@ -45,41 +45,45 @@
             </form>
         </div>
         <div class="add-book-container">
-                <form th:action="@{/register}" method="get">
-                    <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
-                        <button type="submit">Добавить пользователя</button>
-                    </div>
-                </form>
+            <form th:action="@{/register}" method="get">
+                <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                    <button type="submit">Добавить пользователя</button>
+                </div>
+            </form>
         </div>
     </div>
-        <div class="status-bar">
+    <div class="status-bar">
         <p th:text="'Результаты поиска: ' + ${users.size()}"></p>
     </div>
-    <div class="table">
-        <table>
-            <thead>
-            <tr>
-                <th th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">Удалить</th>
-                <th>Пользователь</th>
-                <th>Логин</th>
-                <th>Пароль</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">
-                <td>
-                    <form th:action="@{/deleteUser}" method="post">
-                        <input type="hidden" name="userId" th:value="${user.id}">
-                        <button type="submit" class="delete-btn">Удалить</button>
-                    </form>
-                </td>
-                <td th:text="${user.FIO} + ', ' + ${user.date}+ ', ' +${user.phoneNumber} + ', ' +${user.numberDocument}"></td>
-                <td th:text="${user.login}"></td>
-                <td th:text="${user.password}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <form th:action="@{/deleteUsers}" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}" method="post">
+        <div class="button">
+            <button type="submit" class="delete-btn">Удалить выбранных</button>
+        </div>
+        <div class="table">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAllCheckbox" onclick="toggleAllCheckboxes(this)"/>
+                    </th>
+                    <th>Пользователь</th>
+                    <th>Логин</th>
+                    <th>Пароль</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td>
+                        <input type="checkbox" name="selectedUsers" th:value="${user.id}"/>
+                    </td>
+                    <td th:text="${user.FIO} + ', ' + ${user.date}+ ', ' +${user.phoneNumber} + ', ' +${user.numberDocument}"></td>
+                    <td th:text="${user.login}"></td>
+                    <td th:text="${user.password}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>
 <script>
     function validateSearch() {
@@ -89,6 +93,12 @@
             return false;
         }
         return true;
+    }
+    function toggleAllCheckboxes(source) {
+        const checkboxes = document.getElementsByName('selectedUsers');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
     }
 </script>
 </body>

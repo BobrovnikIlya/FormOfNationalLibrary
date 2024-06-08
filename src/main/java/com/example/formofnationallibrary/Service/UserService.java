@@ -45,12 +45,14 @@ public class UserService {
         return userRepository.save(user);
     }
     @Transactional
-    public void deleteUserAndRelatedRecords(Long userId) {
-        favoritesRepository.deleteByUserId(userId);
-        ordersRepository.deleteByUserId(userId);
-        orderHistoryRepository.deleteByUserId(userId);
-        queueRepository.deleteByUserId(userId);
-        userRepository.deleteById(userId);
+    public void deleteUsersAndRelatedRecords(List<Long> userIds) {
+        for (Long userId : userIds) {
+            favoritesRepository.deleteByUserId(userId);
+            ordersRepository.deleteByUserId(userId);
+            orderHistoryRepository.deleteByUserId(userId);
+            queueRepository.deleteByUserId(userId);
+            userRepository.deleteById(userId);
+        }
     }
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);

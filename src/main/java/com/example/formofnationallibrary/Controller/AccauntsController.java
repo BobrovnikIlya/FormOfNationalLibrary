@@ -32,9 +32,9 @@ public class AccauntsController {
         }
     }
 
-    @PostMapping("/deleteUser")
-    public String deleteUser(@RequestParam("userId") Long userId) {
-        userService.deleteUserAndRelatedRecords(userId);
+    @PostMapping("/deleteUsers")
+    public String deleteUsers(@RequestParam("selectedUsers") List<Long> userIds) {
+        userService.deleteUsersAndRelatedRecords(userIds);
         return "redirect:/accounts";
     }
 }

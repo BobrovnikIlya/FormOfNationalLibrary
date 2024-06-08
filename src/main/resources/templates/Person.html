@@ -26,31 +26,39 @@
     </div>
 </header>
 <div class="container">
-    <form th:action="@{/search}" method="get" onsubmit="return validateSearch()">
-        <div class="search-bar">
-            <input type="text" id="query" name="query" placeholder="Введите текст для поиска книги">
+    <div class="button-container">
+        <div class="search-container">
+            <form th:action="@{/search}" method="get" onsubmit="return validateSearch()">
+                <div class="search-bar">
+                    <input type="text" id="query" name="query" placeholder="Введите текст для поиска книги">
+                </div>
+                <div class="dropdown">
+                    <select name="field">
+                        <option value="all">Все поля</option>
+                        <option value="author">Автор</option>
+                        <option value="title">Название</option>
+                        <option value="category">Категория</option>
+                    </select>
+                </div>
+                <div class="button">
+                    <button type="submit">Найти</button>
+                </div>
+            </form>
         </div>
-        <div class="dropdown">
-            <select name="field">
-                <option value="all">Все поля</option>
-                <option value="author">Автор</option>
-                <option value="title">Название</option>
-                <option value="category">Категория</option>
-            </select>
+        <div class="add-book-container">
+            <form th:action="@{/exportFormular}" method="get">
+                <div class="button">
+                    <button type="button" onclick="downloadForm()">Скачать формуляр</button>
+                </div>
+            </form>
         </div>
-        <div class="button">
-            <button type="submit">Найти</button>
-        </div>
-    </form>
+    </div>
 </div>
 <div class="main-container">
     <div class="content">
         <div class="table" id="content" >
-
-            <!-- Content will be loaded here -->
-            </div>
         </div>
-
+    </div>
     <div class="sidebar">
         <button onclick="showContent('profile')">Профиль</button>
         <button onclick="showContent('favorites')">Избранные</button>
@@ -235,6 +243,23 @@
         }
         return true;
     }
+
+    function downloadForm() {
+        fetch('/exportFormular')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'formular.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => console.error('Ошибка скачивания формуляра:', error));
+    }
 </script>
+
+
 </body>
 </html>
