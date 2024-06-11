@@ -161,7 +161,14 @@ public class SearchController {
             return "redirect:/login"; // Перенаправляем на страницу входа, если пользователь не авторизован
         }
     }
-
+    @GetMapping("/popular")
+    public ModelAndView showPopularBooks(Model model) {
+        List<Book> popularBooks = bookService.findTop5ByOrderByNumberOrdersDesc();
+        System.out.println("Popular books: " + popularBooks);
+        ModelAndView mav = new ModelAndView("PopularBook");
+        mav.addObject("books", popularBooks);
+        return mav;
+    }
 }
 
 

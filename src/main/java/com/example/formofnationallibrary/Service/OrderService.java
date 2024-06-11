@@ -20,9 +20,8 @@ public class OrderService {
     public void removeById(Long orderId) {
         orderRepository.deleteById(orderId);
     }
-
-    public List<Order> getUserOrders(Long userId) {
-        return orderRepository.findOrdersByUserId(userId);
+    public void save(Order order) {
+        orderRepository.save(order);
     }
 }
 

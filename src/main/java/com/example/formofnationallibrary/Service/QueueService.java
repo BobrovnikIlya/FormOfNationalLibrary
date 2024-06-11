@@ -27,10 +27,16 @@ public class QueueService {
     public List<Queue> findByBookIdAndQueueNumberGreaterThan(Long bookId, int queueNumber) {
         return queueRepository.findByBookIdAndQueueNumberGreaterThan(bookId, queueNumber);
     }
+    public List<Queue> findQueueByBookIdOrderByQueueNumberAsc(Long bookId) {
+        return queueRepository.findQueueByBookIdOrderByQueueNumberAsc(bookId);
+    }
     public List<Queue> findByUserId(Long userId) {
         return queueRepository.findByUserId(userId);
     }
     public void removeById(Long queueId) {
         queueRepository.deleteById(queueId);
+    }
+    public void remove(Queue queue) {
+        queueRepository.delete(queue);
     }
 }

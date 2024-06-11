@@ -55,11 +55,18 @@
     <div class="status-bar">
         <p th:text="'Результаты поиска: ' + ${books.size()}"></p>
     </div>
-    <form th:action="@{/deleteBooks}" method="post" onsubmit="return submitDeleteForm()">
-        <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
-            <button type="submit" class="delete-btn">Удалить выбранные</button>
-        </div>
-    </form>
+    <div class="button-container">
+        <form th:action="@{/deleteBooks}" method="post" onsubmit="return submitDeleteForm()">
+            <div class="button" th:if="${loggedInUser != null and loggedInUser.role.name == 'Admin'}">
+                <button type="submit" class="delete-btn">Удалить выбранные</button>
+            </div>
+        </form>
+            <!--<form th:action="@{/popular}" method="get">
+                <div class="button">
+                <button type="submit">Популярные</button>
+                </div>
+            </form>-->
+    </div>
     <form id="booksForm">
         <div class="table">
             <table>

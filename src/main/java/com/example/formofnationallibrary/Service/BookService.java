@@ -67,4 +67,7 @@ public class BookService {
         public void saveBook(Book book) {
         bookRepository.save(book);
     }
+    public List<Book> findTop5ByOrderByNumberOrdersDesc() {
+        return bookRepository.findTop5ByOrderByNumberOrdersDesc();
+    }
 }

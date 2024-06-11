@@ -25,6 +25,8 @@ public class PersonController {
     private final StatusCopiesService statusCopiesService;
     private final OrderService orderService;
     private final OrderHistoryService orderHistoryService;
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     public PersonController(QueueService queueService, UserService userService, FavoriteService favoriteService, BookService bookService, OrderService orderService, OrderHistoryService orderHistoryService, CopiesService copiesService, StatusCopiesService statusCopiesService) {
@@ -123,28 +125,71 @@ public class PersonController {
         Map<String, Object> response = new HashMap<>();
         Long orderId = request.get("id");
         Order order = orderService.findById(orderId);
+
         if (order != null) {
-            // Создание записи в order_history
-            OrderHistory orderHistory = new OrderHistory();
-            orderHistory.setUser(userService.findById(order.getUserId()).orElse(null));
-            orderHistory.setCopies(order.getCopies());
-            orderHistory.setIssueDate(order.getIssueDate());
-            orderHistory.setReturnDate(order.getReturnDate());
-            orderHistory.setReturnDate(LocalDate.now()); // Текущая дата
-
-            orderHistoryService.save(orderHistory);
-
-            // Обновление статуса экземпляра книги на "Свободен"
+            // Получаем экземпляр книги из заказа
             Copies copies = order.getCopies();
-            StatusCopies freeStatus = statusCopiesService.findByStatus("Свободен");
-            copies.setStatusCopies(freeStatus);
-            copiesService.saveCopy(copies); // Предположим, что у вас есть метод для сохранения изменений статуса экземпляра книги
+            Long bookId = copies.getBook().getId();
 
-            orderService.removeById(orderId);
-            response.put("success", true);
+            // Проверяем наличие очереди на данную книгу
+            List<Queue> queueList = queueService.findQueueByBookIdOrderByQueueNumberAsc(bookId);
+
+            if (queueList.isEmpty()) {
+                // Если очереди нет, выполняем стандартное удаление заказа и обновление статуса
+                OrderHistory orderHistory = new OrderHistory();
+                orderHistory.setUser(userService.findById(order.getUserId()).orElse(null));
+                orderHistory.setCopies(order.getCopies());
+                orderHistory.setIssueDate(order.getIssueDate());
+                orderHistory.setReturnDate(order.getReturnDate());
+                orderHistory.setReturnDate(LocalDate.now()); // Текущая дата
+                orderHistoryService.save(orderHistory);
+
+                StatusCopies freeStatus = statusCopiesService.findByStatus("Свободен");
+                copies.setStatusCopies(freeStatus);
+                copiesService.saveCopy(copies);
+
+                orderService.removeById(orderId);
+                response.put("success", true);
+            } else {
+                // Если очередь существует, обрабатываем первого пользователя в очереди
+                Queue firstInQueue = queueList.get(0);
+                User nextUser = userService.findById(firstInQueue.getUserId()).orElse(null);
+                if (nextUser != null) {
+                    // Создаем новый заказ для первого пользователя в очереди
+                    Order newOrder = new Order();
+                    newOrder.setUserId(nextUser.getId());
+                    newOrder.setCopies(copies);
+                    newOrder.setIssueDate(LocalDate.now());
+                    newOrder.setReturnDate(LocalDate.now().plusDays(30));
+                    orderService.save(newOrder);
+
+                    // Обновляем статус экземпляра книги на "Занят"
+                    StatusCopies occupiedStatus = statusCopiesService.findByStatus("Занят");
+                    copies.setStatusCopies(occupiedStatus);
+                    copiesService.saveCopy(copies);
+
+                    // Удаляем запись из очереди
+                    queueService.remove(firstInQueue);
+
+                    // Обновляем queue_number для оставшихся пользователей
+                    for (int i = 1; i < queueList.size(); i++) {
+                        Queue queue = queueList.get(i);
+                        queue.setQueueNumber(queue.getQueueNumber() - 1);
+                        queueService.save(queue);
+                    }
+                    orderService.removeById(orderId);
+                    // Отправляем уведомление пользователю
+                    //emailService.sendEmail(nextUser.getEmail(), "Your Book Order", "You have successfully ordered the book.");
+
+                    response.put("success", true);
+                } else {
+                    response.put("success", false);
+                }
+            }
         } else {
             response.put("success", false);
         }
+
         return response;
     }
 

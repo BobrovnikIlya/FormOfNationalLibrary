@@ -20,6 +20,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.name LIKE %:query% OR b.author.name LIKE %:query% OR b.cities.name LIKE %:query% OR b.category LIKE %:query% OR b.description LIKE %:query% ORDER BY b.name")
     List<Book> findAllByQuery(@Param("query") String query);
+
+    List<Book> findTop5ByOrderByNumberOrdersDesc();
 }
 
 

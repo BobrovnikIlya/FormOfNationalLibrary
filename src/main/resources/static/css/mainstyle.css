@@ -201,16 +201,6 @@ header {
     cursor: pointer;
 }
 
-.button button {
-    padding: 10px 20px;
-    background-color: #019875;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 .button button:hover {
     background-color: #007459;
 }
@@ -235,12 +225,4 @@ header {
 }
 .button-group .button {
     margin-right: 20px; /* Отступ между кнопками */
-}
-.chart-container {
-    width: 50%;
-    margin: auto;
-    background-color: #bebebe; /* Light gray background */
-    padding: 20px; /* Optional: adds some padding around the chart */
-    border-radius: 10px; /* Optional: adds rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
 }

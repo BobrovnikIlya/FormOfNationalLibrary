@@ -26,7 +26,7 @@ public class Book {
     @Column(name = "views")
     private int views;
     @Column(name = "number_orders")
-    private int number_orders;
+    private int numberOrders;
     @Column(name = "number_favorite")
     private int number_favorite;
     @ManyToOne
@@ -44,11 +44,11 @@ public class Book {
     private Language language;
 
     public int getNumber_orders() {
-        return number_orders;
+        return numberOrders;
     }
 
-    public void setNumber_orders(int number_orders) {
-        this.number_orders = number_orders;
+    public void setNumber_orders(int numberOrders) {
+        this.numberOrders = numberOrders;
     }
 
     public int getNumber_favorite() {

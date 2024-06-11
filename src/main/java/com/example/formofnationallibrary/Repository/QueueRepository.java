@@ -18,4 +18,6 @@ public interface QueueRepository extends JpaRepository<Queue, Long> {
     @Modifying
     @Query("DELETE FROM Queue q WHERE q.book.id = :bookId")
     void deleteByBookId(@Param("bookId") Long bookId);
+
+    List<Queue> findQueueByBookIdOrderByQueueNumberAsc(Long bookId);
 }
